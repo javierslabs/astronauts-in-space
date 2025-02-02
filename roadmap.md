@@ -50,3 +50,65 @@ Open the index.html file in a browser.
 Ensure the following:
 The number of astronauts is displayed.
 The astronaut images appear and bounce around.
+
+## How to Make Changes
+
+### Local Development
+1. Make changes to your files in your code editor
+2. Test changes locally by opening index.html in browser
+
+### Version Control Steps
+1. **Check Status**
+   ```bash
+   git status
+   ```
+   Shows which files you've modified
+
+2. **Stage Changes**
+   ```bash
+   # For specific files:
+   git add script.js
+   git add style.css
+   
+   # Or for all changes:
+   git add .
+   ```
+
+3. **Commit Changes**
+   ```bash
+   # Use descriptive messages
+   git commit -m "Added new feature: astronaut rotation"
+   ```
+
+4. **Push to GitHub**
+   ```bash
+   git push
+   ```
+
+### Best Practices
+1. **Make Focused Commits**
+   - Each commit should represent one logical change
+   - Use clear commit messages describing what changed
+
+2. **Use Branches for New Features**
+   ```bash
+   # Create and switch to new branch
+   git checkout -b feature-name
+   
+   # After changes:
+   git add .
+   git commit -m "Added new feature"
+   git push -u origin feature-name
+   ```
+
+3. **Stay Updated**
+   ```bash
+   # Before starting new work:
+   git pull
+   ```
+
+4. **Track History**
+   ```bash
+   # View commit history
+   git log
+   ```

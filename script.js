@@ -1,160 +1,157 @@
-// Update API constants
-const DIRECT_API_URL = 'http://api.open-notify.org/astros.json';
-const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
-const BACKUP_API_URL = CORS_PROXY + 'http://api.open-notify.org/astros.json';
+// API constants
+const BASE_URL = 'http://api.open-notify.org/astros.json';
+const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
+const API_URL = CORS_PROXY + encodeURIComponent(BASE_URL);
 
-// Animation constants
-const FLOAT_AMPLITUDE = 20; // pixels for floating animation
-const FLOAT_SPEED = 0.001; // speed of floating animation
+// Constants for layout
+const ASTRONAUT_SIZE = 80; // Size of astronaut in pixels
+const HEADER_SAFE_ZONE = 100; // Space from top for header
+const CENTER_SAFE_ZONE = 200; // Space around center circle
 
-// Store active astronauts
-let activeAstronauts = [];
+// Add rotation constant
+const MAX_ROTATION = 360; // Maximum rotation in degrees
 
-// Function to fetch astronaut data
-async function getAstronautData() {
-    try {
-        const response = await fetch(DIRECT_API_URL);
-        if (!response.ok) {
-            throw new Error('Direct API failed');
-        }
-        const data = await response.json();
-        updateAstronautCount(data.number);
-    } catch (firstError) {
-        console.log('Direct API failed, trying with CORS proxy...');
-        try {
-            const response = await fetch(BACKUP_API_URL);
-            if (!response.ok) {
-                throw new Error('Proxy API failed');
-            }
-            const data = await response.json();
-            updateAstronautCount(data.number);
-        } catch (secondError) {
-            console.error('Both API attempts failed:', firstError, secondError);
-            const fallbackCount = 6;
-            console.log('Using fallback count:', fallbackCount);
-            updateAstronautCount(fallbackCount);
-        }
-    }
-}
+// Add animation constants
+const FLOAT_SPEED = 0.001;
+const FLOAT_AMPLITUDE = 15;
 
-// Function to update the astronaut count display
-function updateAstronautCount(count) {
-    document.getElementById('astronaut-count').textContent = count;
-    createAstronautElements(count);
-}
-
-// Update astronaut positions
-function updateAstronautPositions() {
-    activeAstronauts.forEach(astronaut => {
-        const angleInRadians = (astronaut.rotation - 90) * (Math.PI / 180);
-        const floatTime = Date.now() * FLOAT_SPEED + astronaut.floatOffset;
-        
-        const offsetX = Math.cos(angleInRadians) * Math.sin(floatTime) * FLOAT_AMPLITUDE;
-        const offsetY = Math.sin(angleInRadians) * Math.sin(floatTime) * FLOAT_AMPLITUDE;
-        
-        // Apply transformations, handling the flip
-        astronaut.element.style.transform = `
-            translate(${astronaut.x + offsetX}px, ${astronaut.y + offsetY}px)
-            rotate(${astronaut.rotation}deg)
-            scale(${astronaut.scale})
-        `;
-        
-        // The image flip is handled separately on the img element
-    });
-    
-    requestAnimationFrame(updateAstronautPositions);
-}
-
-// Create astronaut elements
-function createAstronautElements(count) {
+// Function to create astronaut elements
+function createAstronautElements(astronauts) {
     const container = document.getElementById('astronaut-container');
     container.innerHTML = '';
-    activeAstronauts = [];
     
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
-    const safeZone = 200;
-    const astronautSize = 90;
-    const flipCount = Math.floor(count / 2); // Handle odd numbers by flooring
-    
     const occupiedSpaces = [];
     
-    for (let i = 0; i < count; i++) {
+    const activeAstronauts = []; // Store astronaut data for animation
+    
+    astronauts.forEach((astronaut, index) => {
         const astronautDiv = document.createElement('div');
         astronautDiv.className = 'astronaut';
         
         const astronautImg = document.createElement('img');
         astronautImg.src = 'https://www.svgrepo.com/show/24715/astronaut-ingravity.svg';
-        astronautImg.alt = 'Floating astronaut';
+        astronautImg.alt = 'Astronaut';
         astronautImg.className = 'astronaut-icon';
         
-        // Flip the first half of astronauts
-        const isFlipped = i < flipCount;
+        // Mirror half of the astronauts
+        const isFlipped = index < Math.floor(astronauts.length / 2);
         if (isFlipped) {
             astronautImg.style.transform = 'scaleX(-1)';
         }
         
+        // Random rotation
+        const rotation = Math.random() * MAX_ROTATION;
+        
+        // Find a valid position
+        let validPosition = false;
         let x, y;
         let attempts = 0;
-        let validPosition = false;
         
         while (!validPosition && attempts < 100) {
-            x = Math.random() * (window.innerWidth - astronautSize);
-            y = Math.random() * (window.innerHeight - astronautSize);
+            // Add padding to keep astronauts fully in view
+            const padding = ASTRONAUT_SIZE;
+            x = padding + Math.random() * (window.innerWidth - ASTRONAUT_SIZE - padding * 2);
+            y = padding + Math.random() * (window.innerHeight - ASTRONAUT_SIZE - padding * 2);
             
-            // Check if position overlaps with center safe zone
-            const isCenterOverlap = Math.abs(x - centerX) < safeZone && 
-                                  Math.abs(y - centerY) < safeZone;
+            // Check header overlap
+            const isHeaderOverlap = y < HEADER_SAFE_ZONE;
             
-            // Check if position overlaps with other astronauts
+            // Check center circle overlap
+            const isCenterOverlap = Math.abs(x - centerX) < CENTER_SAFE_ZONE && 
+                                  Math.abs(y - centerY) < CENTER_SAFE_ZONE;
+            
+            // Check other astronauts overlap
             const isAstronautOverlap = occupiedSpaces.some(space => {
                 const distance = Math.sqrt(
                     Math.pow(space.x - x, 2) + 
                     Math.pow(space.y - y, 2)
                 );
-                return distance < astronautSize;
+                return distance < ASTRONAUT_SIZE * 1.2;
             });
             
-            if (!isCenterOverlap && !isAstronautOverlap) {
-                validPosition = true;
+            validPosition = !isHeaderOverlap && !isCenterOverlap && !isAstronautOverlap;
+            
+            if (validPosition) {
                 occupiedSpaces.push({ x, y });
             }
-            
             attempts++;
         }
         
-        if (!validPosition) {
-            console.log(`Could only place ${i} astronauts without overlap`);
-            break;
+        if (validPosition) {
+            // Store astronaut data for animation
+            activeAstronauts.push({
+                element: astronautDiv,
+                x: x,
+                y: y,
+                rotation: rotation,
+                floatOffset: Math.random() * 1000 // Random starting point
+            });
+
+            // Initial position
+            updateAstronautPosition(activeAstronauts[activeAstronauts.length - 1]);
+            astronautDiv.appendChild(astronautImg);
+            container.appendChild(astronautDiv);
         }
-        
-        // Set initial styles
-        astronautDiv.style.position = 'absolute';
-        astronautDiv.style.left = '0';
-        astronautDiv.style.top = '0';
-        
-        // Random rotation and scale
-        const rotation = Math.random() * 360;
-        const scale = 0.9 + Math.random() * 0.2;
-        
-        astronautDiv.appendChild(astronautImg);
-        container.appendChild(astronautDiv);
-        
-        // Add to active astronauts
-        activeAstronauts.push({
-            element: astronautDiv,
-            x: x,
-            y: y,
-            rotation: rotation,
-            scale: scale,
-            floatOffset: Math.random() * Math.PI * 2,
-            isFlipped: isFlipped
-        });
-    }
-    
-    // Start the animation
+    });
+
+    // Start animation
     if (activeAstronauts.length > 0) {
-        requestAnimationFrame(updateAstronautPositions);
+        animateAstronauts(activeAstronauts);
+    }
+}
+
+// Function to update a single astronaut's position
+function updateAstronautPosition(astronaut) {
+    // Convert rotation to radians and adjust for transform coordinate system
+    const angleInRadians = (astronaut.rotation - 90) * (Math.PI / 180);
+    
+    // Calculate offset based on rotation angle
+    const floatAmount = Math.sin(Date.now() * FLOAT_SPEED + astronaut.floatOffset) * FLOAT_AMPLITUDE;
+    const offsetX = Math.cos(angleInRadians) * floatAmount;
+    const offsetY = Math.sin(angleInRadians) * floatAmount;
+    
+    // Apply transform with rotated movement
+    astronaut.element.style.transform = `
+        translate(${astronaut.x + offsetX}px, ${astronaut.y + offsetY}px)
+        rotate(${astronaut.rotation}deg)
+    `;
+}
+
+// Animation loop
+function animateAstronauts(astronauts) {
+    astronauts.forEach(updateAstronautPosition);
+    requestAnimationFrame(() => animateAstronauts(astronauts));
+}
+
+// Function to update the astronaut count display
+function updateAstronautCount(count) {
+    document.getElementById('astronaut-count').textContent = count;
+}
+
+// Update the getAstronautData function to create astronauts
+async function getAstronautData() {
+    try {
+        const response = await fetch(API_URL);
+        const data = await response.json(); // Direct JSON parse, no wrapper needed
+        console.log('API Response:', data);
+        
+        if (data && Array.isArray(data.people)) {
+            const count = data.people.length;
+            console.log('Number of astronauts:', count);
+            updateAstronautCount(count);
+            createAstronautElements(data.people);
+        } else {
+            throw new Error('Invalid data format');
+        }
+    } catch (error) {
+        console.error('API call failed. Error:', error);
+        console.error('Error details:', error.message);
+        const fallbackCount = 6;
+        console.log('Using fallback count:', fallbackCount);
+        updateAstronautCount(fallbackCount);
+        createAstronautElements(Array(fallbackCount).fill({ name: 'Astronaut' }));
     }
 }
 

@@ -109,4 +109,45 @@ h2 {
     pointer-events: none; /* Prevents unwanted hover effects */
 }
 
-/* Remove the @keyframes float since we're not using it anymore */ 
+/* Remove the @keyframes float since we're not using it anymore */
+
+.name-wrapper {
+    position: absolute;
+    width: 100%;
+    top: -40px;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.astronaut-name {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px);
+}
+
+/* Show name on hover for non-touch devices */
+@media (hover: hover) {
+    .astronaut:hover .astronaut-name {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* For touch devices */
+@media (hover: none) {
+    .astronaut.touched .astronaut-name {
+        opacity: 1;
+        transform: translateY(0);
+    }
+} 
