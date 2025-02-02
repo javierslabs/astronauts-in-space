@@ -6,7 +6,7 @@ const API_URL = CORS_PROXY + encodeURIComponent(BASE_URL);
 // Constants for layout
 const ASTRONAUT_SIZE = isMobile() ? 40 : 80; // Much smaller on mobile
 const HEADER_SAFE_ZONE = isMobile() ? 60 : 100; // Smaller header zone
-const CENTER_SAFE_ZONE = isMobile() ? 100 : 200; // Much smaller safe zone
+const CENTER_SAFE_ZONE = isMobile() ? 90 : 200; // Even smaller for mobile
 
 // Add rotation constant
 const MAX_ROTATION = 360; // Maximum rotation in degrees
@@ -21,22 +21,49 @@ function isMobile() {
            navigator.userAgent.match(/iPhone|iPad|iPod|Android/i);
 }
 
+// Update constants for better mobile handling
+function getViewportDimensions() {
+    // Use visual viewport for more accurate mobile dimensions
+    const vw = Math.min(document.documentElement.clientWidth, window.innerWidth);
+    const vh = Math.min(document.documentElement.clientHeight, window.innerHeight);
+    return { width: vw, height: vh };
+}
+
 // Function to create astronaut elements
 function createAstronautElements(astronauts) {
     const container = document.getElementById('astronaut-container');
     container.innerHTML = '';
     
-    // Get actual viewport dimensions
-    const viewportWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-    const viewportHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+    const viewport = getViewportDimensions();
+    const numAstronauts = astronauts.length;
     
-    const centerX = viewportWidth / 2;
-    const centerY = viewportHeight / 2;
+    // Calculate optimal size based on viewport and number of astronauts
+    const maxAstronautsPerRow = Math.ceil(Math.sqrt(numAstronauts));
+    const dynamicSize = isMobile() 
+        ? Math.min(30, Math.min(
+            viewport.width / (maxAstronautsPerRow * 1.5), 
+            viewport.height / (maxAstronautsPerRow * 1.5)
+          ))
+        : ASTRONAUT_SIZE;
+    
+    // Adjust safe zones based on viewport
+    const safeCenterZone = isMobile() 
+        ? Math.min(80, Math.min(viewport.width, viewport.height) / 4)
+        : CENTER_SAFE_ZONE;
+    
+    const safeHeaderZone = isMobile() 
+        ? Math.min(50, viewport.height / 10)
+        : HEADER_SAFE_ZONE;
+    
+    // Tighter spacing for mobile
+    const spacing = isMobile() 
+        ? dynamicSize * 1.1 
+        : ASTRONAUT_SIZE * 1.2;
+    
+    const centerX = viewport.width / 2;
+    const centerY = viewport.height / 2;
     const occupiedSpaces = [];
     const activeAstronauts = [];
-    
-    // Adjust spacing for mobile
-    const spacing = isMobile() ? ASTRONAUT_SIZE * 1.2 : ASTRONAUT_SIZE * 1.2; // Tighter spacing on mobile
     
     astronauts.forEach((astronaut, index) => {
         const astronautDiv = document.createElement('div');
@@ -62,24 +89,30 @@ function createAstronautElements(astronauts) {
         let attempts = 0;
         
         while (!validPosition && attempts < 100) {
-            const padding = ASTRONAUT_SIZE;
-            x = padding + Math.random() * (viewportWidth - ASTRONAUT_SIZE - padding * 2);
-            y = padding + Math.random() * (viewportHeight - ASTRONAUT_SIZE - padding * 2);
+            const padding = dynamicSize;
+            x = padding + Math.random() * (viewport.width - dynamicSize - padding * 2);
+            y = padding + Math.random() * (viewport.height - dynamicSize - padding * 2);
             
             // Adjust overlap checks for mobile
-            const isHeaderOverlap = y < (isMobile() ? HEADER_SAFE_ZONE * 0.8 : HEADER_SAFE_ZONE);
-            const isCenterOverlap = Math.abs(x - centerX) < (isMobile() ? CENTER_SAFE_ZONE * 0.8 : CENTER_SAFE_ZONE) && 
-                                  Math.abs(y - centerY) < (isMobile() ? CENTER_SAFE_ZONE * 0.8 : CENTER_SAFE_ZONE);
-            
+            const isHeaderOverlap = y < safeHeaderZone;
+
+            const distanceToCenter = Math.hypot(x - centerX, y - centerY);
+            const isCenterOverlap = distanceToCenter < (safeCenterZone + dynamicSize / 2);
+
             const isAstronautOverlap = occupiedSpaces.some(space => {
-                const distance = Math.sqrt(
-                    Math.pow(space.x - x, 2) + 
-                    Math.pow(space.y - y, 2)
-                );
-                return distance < spacing;
+                const distance = Math.hypot(x - space.x, y - space.y);
+                return distance < (spacing + dynamicSize / 2);
             });
-            
-            validPosition = !isHeaderOverlap && !isCenterOverlap && !isAstronautOverlap;
+
+            // Add boundary check
+            const isBoundaryOverlap = 
+                x < dynamicSize || 
+                x > viewport.width - dynamicSize ||
+                y < dynamicSize || 
+                y > viewport.height - dynamicSize;
+
+            validPosition = !isHeaderOverlap && !isCenterOverlap && 
+                            !isAstronautOverlap && !isBoundaryOverlap;
             
             if (validPosition) {
                 occupiedSpaces.push({ x, y });

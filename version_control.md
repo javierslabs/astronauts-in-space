@@ -711,6 +711,82 @@ const CENTER_SAFE_ZONE = isMobile() ? 100 : 200;
 #### Commit Message:
 "Significantly reduced element sizes for mobile"
 
+### v2.2.15 - Mobile Overlap Fix
+**Date:** [Current Date]
+
+#### Changes:
+- Fixed mobile overlap issues
+  - Added proper z-index layering
+  - Improved circle safe zone calculation
+  - Tighter spacing on mobile
+  - Better distance checking
+  - Files modified: `script.js`, `style.css`
+
+#### Technical Details:
+```css
+.astronaut-counter {
+    z-index: 10;
+}
+.astronaut {
+    z-index: 1;
+}
+```
+```javascript
+const CENTER_SAFE_ZONE = isMobile() ? 90 : 200;
+const isCenterOverlap = Math.hypot(x - centerX, y - centerY) < CENTER_SAFE_ZONE;
+```
+
+#### Commit Message:
+"Fixed mobile overlap and layering issues"
+
+### v2.2.16 - Mobile Viewport Fix
+**Date:** [Current Date]
+
+#### Changes:
+- Fixed mobile viewport handling
+  - Prevented page scrolling
+  - Dynamic astronaut sizing
+  - Viewport-aware spacing
+  - Adjusted safe zones
+  - Files modified: `script.js`, `style.css`
+
+#### Technical Details:
+```javascript
+const dynamicSize = isMobile() ? 
+    Math.min(40, Math.min(viewportWidth / maxAstronautsPerRow, viewportHeight / 6)) : 
+    ASTRONAUT_SIZE;
+
+const safeCenterZone = isMobile() ? Math.min(90, viewportHeight / 4) : CENTER_SAFE_ZONE;
+```
+
+#### Commit Message:
+"Fixed mobile viewport to prevent scrolling"
+
+### v2.2.17 - Mobile Layout Refinement
+**Date:** [Current Date]
+
+#### Changes:
+- Refined mobile layout calculations
+  - Added viewport dimension helper
+  - Dynamic sizing based on astronaut count
+  - Improved overlap detection
+  - Added boundary checks
+  - Files modified: `script.js`
+
+#### Technical Details:
+```javascript
+const viewport = getViewportDimensions();
+const dynamicSize = isMobile() 
+    ? Math.min(30, Math.min(
+        viewport.width / (maxAstronautsPerRow * 1.5), 
+        viewport.height / (maxAstronautsPerRow * 1.5)
+      ))
+    : ASTRONAUT_SIZE;
+```
+
+#### Commit Message:
+"Refined mobile layout calculations and spacing"
+
 ---
 
 ## Version 1 (Original)
