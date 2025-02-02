@@ -575,6 +575,142 @@ const spacing = isMobile() ? ASTRONAUT_SIZE * 1.5 : ASTRONAUT_SIZE * 1.2;
 #### Commit Message:
 "Improved mobile layout and responsiveness"
 
+### v2.2.10 - Loading State Enhancement
+**Date:** [Current Date]
+
+#### Changes:
+- Improved loading state display
+  - Smaller "Loading..." text
+  - Added fade effect
+  - Better circle fit
+  - Files modified: `script.js`, `style.css`
+
+#### Technical Details:
+```css
+#astronaut-count.loading {
+    font-size: 2rem;
+    opacity: 0.7;
+    font-weight: 300;
+}
+```
+
+#### Commit Message:
+"Enhanced loading state visualization"
+
+### v2.2.11 - Mobile Optimization
+**Date:** [Current Date]
+
+#### Changes:
+- Optimized mobile experience
+  - Removed unnecessary CORS fallback
+  - Improved mobile detection
+  - Adjusted astronaut sizing
+  - Reduced safe zones for small screens
+  - Files modified: `script.js`
+
+#### Technical Details:
+```javascript
+const ASTRONAUT_SIZE = Math.min(60, window.innerWidth / 10);
+const CENTER_SAFE_ZONE = Math.min(150, window.innerWidth / 3);
+
+function isMobile() {
+    return window.innerWidth <= 768 || 
+           navigator.userAgent.match(/iPhone|iPad|iPod|Android/i);
+}
+```
+
+#### Commit Message:
+"Optimized layout for mobile devices"
+
+### v2.2.12 - Mobile Size Optimization
+**Date:** [Current Date]
+
+#### Changes:
+- Optimized element sizes for mobile
+  - Reduced circle size
+  - Smaller astronaut icons
+  - Adjusted text scaling
+  - Tighter spacing rules
+  - Files modified: `script.js`, `style.css`
+
+#### Technical Details:
+```css
+@media (max-width: 768px) {
+    .astronaut-counter {
+        width: 180px;
+        height: 180px;
+    }
+    #astronaut-count {
+        font-size: 3.5rem;
+    }
+}
+```
+```javascript
+const ASTRONAUT_SIZE = isMobile() ? 50 : 80;
+const CENTER_SAFE_ZONE = isMobile() ? 120 : 200;
+```
+
+#### Commit Message:
+"Optimized element sizes for mobile display"
+
+### v2.2.13 - Loading Text Fix
+**Date:** [Current Date]
+
+#### Changes:
+- Fixed loading text size
+  - Reduced loading text size
+  - Better circle fit
+  - Mobile size adjustment
+  - Files modified: `style.css`
+
+#### Technical Details:
+```css
+#astronaut-count.loading {
+    font-size: 1.8rem;
+}
+
+@media (max-width: 768px) {
+    #astronaut-count.loading {
+        font-size: 1.2rem;
+    }
+}
+```
+
+#### Commit Message:
+"Fixed loading text size for better fit"
+
+### v2.2.14 - Mobile Layout Enhancement
+**Date:** [Current Date]
+
+#### Changes:
+- Further reduced mobile sizes
+  - Much smaller circle (140px)
+  - Smaller astronaut icons (40px)
+  - Reduced safe zones
+  - Adjusted all text sizes
+  - Files modified: `script.js`, `style.css`
+
+#### Technical Details:
+```css
+@media (max-width: 768px) {
+    .astronaut-counter {
+        width: 140px;
+        height: 140px;
+    }
+    .astronaut-icon {
+        width: 40px;
+        height: 40px;
+    }
+}
+```
+```javascript
+const ASTRONAUT_SIZE = isMobile() ? 40 : 80;
+const CENTER_SAFE_ZONE = isMobile() ? 100 : 200;
+```
+
+#### Commit Message:
+"Significantly reduced element sizes for mobile"
+
 ---
 
 ## Version 1 (Original)

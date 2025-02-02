@@ -75,6 +75,13 @@ h2 {
     color: #ffffff;
     font-weight: 200;
     line-height: 1;
+    transition: opacity 0.3s ease;
+}
+
+#astronaut-count.loading {
+    font-size: 1.8rem;  /* Even smaller for loading text */
+    opacity: 0.7;
+    font-weight: 300;
 }
 
 .astronaut-container {
@@ -149,5 +156,31 @@ h2 {
     .astronaut.touched .astronaut-name {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* Add mobile styles */
+@media (max-width: 768px) {
+    .astronaut-counter {
+        width: 140px;  /* Even smaller circle */
+        height: 140px;
+        padding: 1rem;
+    }
+
+    #astronaut-count {
+        font-size: 2.8rem;  /* Smaller number */
+    }
+
+    #astronaut-count.loading {
+        font-size: 1rem;  /* Smaller loading text */
+    }
+
+    h2 {
+        font-size: 0.7rem;  /* Smaller title */
+    }
+
+    .astronaut-icon {
+        width: 40px;  /* Much smaller astronauts */
+        height: 40px;
     }
 } 
