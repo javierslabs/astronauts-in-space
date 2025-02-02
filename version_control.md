@@ -555,6 +555,26 @@ const offsetY = Math.sin(angleInRadians) * floatAmount;
 #### Commit Message:
 "Added rotation-based directional movement"
 
+### v2.2.9 - Mobile Layout Fix
+**Date:** [Current Date]
+
+#### Changes:
+- Improved mobile layout
+  - Responsive sizing for astronauts
+  - Adjusted safe zones for small screens
+  - Better viewport handling
+  - Files modified: `script.js`
+
+#### Technical Details:
+```javascript
+const ASTRONAUT_SIZE = Math.min(80, window.innerWidth / 8);
+const CENTER_SAFE_ZONE = Math.min(200, window.innerWidth / 3);
+const spacing = isMobile() ? ASTRONAUT_SIZE * 1.5 : ASTRONAUT_SIZE * 1.2;
+```
+
+#### Commit Message:
+"Improved mobile layout and responsiveness"
+
 ---
 
 ## Version 1 (Original)
