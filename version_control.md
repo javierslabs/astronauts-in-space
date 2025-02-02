@@ -787,6 +787,62 @@ const dynamicSize = isMobile()
 #### Commit Message:
 "Refined mobile layout calculations and spacing"
 
+### v2.2.18 - Mobile Size Adjustment
+**Date:** [Current Date]
+
+#### Changes:
+- Adjusted mobile astronaut sizing
+  - Much smaller astronauts (25px max)
+  - Tighter spacing (1.05x)
+  - Reduced safe zones
+  - Better distribution
+  - Files modified: `script.js`
+
+#### Technical Details:
+```javascript
+const dynamicSize = isMobile() 
+    ? Math.min(25, Math.min(
+        viewport.width / (maxAstronautsPerRow * 2), 
+        viewport.height / (maxAstronautsPerRow * 2)
+      ))
+    : ASTRONAUT_SIZE;
+
+const spacing = isMobile() 
+    ? dynamicSize * 1.05
+    : ASTRONAUT_SIZE * 1.2;
+```
+
+#### Commit Message:
+"Fixed mobile astronaut sizing and spacing"
+
+### v2.2.19 - Mobile Size Stability
+**Date:** [Current Date]
+
+#### Changes:
+- Fixed mobile size transition issues
+  - Added minimum viewport dimensions
+  - More conservative base sizing
+  - Consistent size calculations
+  - Extremely tight spacing
+  - Files modified: `script.js`
+
+#### Technical Details:
+```javascript
+const minWidth = 320;  // Minimum width for mobile
+const minHeight = 480; // Minimum height for mobile
+
+const baseSize = isMobile() ? 20 : ASTRONAUT_SIZE;
+const dynamicSize = isMobile() 
+    ? Math.min(baseSize, Math.min(
+        viewport.width / (maxAstronautsPerRow * 3),
+        viewport.height / (maxAstronautsPerRow * 3)
+      ))
+    : ASTRONAUT_SIZE;
+```
+
+#### Commit Message:
+"Fixed mobile size transition glitches"
+
 ---
 
 ## Version 1 (Original)

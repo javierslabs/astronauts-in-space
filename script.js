@@ -23,9 +23,12 @@ function isMobile() {
 
 // Update constants for better mobile handling
 function getViewportDimensions() {
-    // Use visual viewport for more accurate mobile dimensions
-    const vw = Math.min(document.documentElement.clientWidth, window.innerWidth);
-    const vh = Math.min(document.documentElement.clientHeight, window.innerHeight);
+    // Set minimum viewport dimensions
+    const minWidth = 320;  // Minimum width for mobile
+    const minHeight = 480; // Minimum height for mobile
+    
+    const vw = Math.max(minWidth, Math.min(document.documentElement.clientWidth, window.innerWidth));
+    const vh = Math.max(minHeight, Math.min(document.documentElement.clientHeight, window.innerHeight));
     return { width: vw, height: vh };
 }
 
@@ -37,27 +40,28 @@ function createAstronautElements(astronauts) {
     const viewport = getViewportDimensions();
     const numAstronauts = astronauts.length;
     
-    // Calculate optimal size based on viewport and number of astronauts
-    const maxAstronautsPerRow = Math.ceil(Math.sqrt(numAstronauts));
+    // More conservative sizing for mobile
+    const maxAstronautsPerRow = Math.ceil(Math.sqrt(numAstronauts + 4)); // Add padding for better spacing
+    const baseSize = isMobile() ? 20 : ASTRONAUT_SIZE; // Smaller base size for mobile
     const dynamicSize = isMobile() 
-        ? Math.min(30, Math.min(
-            viewport.width / (maxAstronautsPerRow * 1.5), 
-            viewport.height / (maxAstronautsPerRow * 1.5)
+        ? Math.min(baseSize, Math.min(
+            viewport.width / (maxAstronautsPerRow * 3), // More conservative division
+            viewport.height / (maxAstronautsPerRow * 3)
           ))
         : ASTRONAUT_SIZE;
     
-    // Adjust safe zones based on viewport
+    // Smaller safe zones for mobile
     const safeCenterZone = isMobile() 
-        ? Math.min(80, Math.min(viewport.width, viewport.height) / 4)
+        ? Math.min(60, Math.min(viewport.width, viewport.height) / 6)
         : CENTER_SAFE_ZONE;
     
     const safeHeaderZone = isMobile() 
-        ? Math.min(50, viewport.height / 10)
+        ? Math.min(30, viewport.height / 15)
         : HEADER_SAFE_ZONE;
     
-    // Tighter spacing for mobile
+    // Very tight spacing for mobile
     const spacing = isMobile() 
-        ? dynamicSize * 1.1 
+        ? dynamicSize * 1.02  // Extremely tight spacing on mobile
         : ASTRONAUT_SIZE * 1.2;
     
     const centerX = viewport.width / 2;
