@@ -396,21 +396,25 @@ function updateAstronautCount(count) {
 
 #### Changes:
 - Fixed screen boundary issues
-  - Added padding to prevent cutoff
-  - Adjusted position calculation
-  - Ensured astronauts stay in view
+  - Added rotation padding
+  - Stricter boundary checks
+  - Adjusted safe zones
+  - Better edge detection
   - Files modified: `script.js`
 
 #### Technical Details:
 ```javascript
-// Added padding to position calculation
-const padding = ASTRONAUT_SIZE;
-x = padding + Math.random() * (window.innerWidth - ASTRONAUT_SIZE - padding * 2);
-y = padding + Math.random() * (window.innerHeight - ASTRONAUT_SIZE - padding * 2);
+const rotationPadding = dynamicSize * 2;
+
+const isBoundaryOverlap = 
+    x < rotationPadding || 
+    x > viewport.width - rotationPadding ||
+    y < rotationPadding || 
+    y > viewport.height - rotationPadding;
 ```
 
 #### Commit Message:
-"Fixed astronaut screen boundary issues"
+"Fixed astronauts appearing outside screen"
 
 ### v2.2.3 - Astronaut Orientation
 **Date:** [Current Date]
@@ -842,6 +846,122 @@ const dynamicSize = isMobile()
 
 #### Commit Message:
 "Fixed mobile size transition glitches"
+
+### v2.2.20 - Circle Overlap Fix
+**Date:** [Current Date]
+
+#### Changes:
+- Fixed circle overlap issues
+  - Increased circle safe zone
+  - Added rotation safe zone
+  - More strict overlap detection
+  - Added size buffer
+  - Files modified: `script.js`
+
+#### Technical Details:
+```javascript
+const safeCenterZone = isMobile() 
+    ? Math.min(80, Math.min(viewport.width, viewport.height) / 4) + dynamicSize
+    : CENTER_SAFE_ZONE + ASTRONAUT_SIZE;
+
+const rotationSafeZone = Math.hypot(x - centerX, y - centerY) < 
+    (safeCenterZone + dynamicSize * 1.5);
+```
+
+#### Commit Message:
+"Fixed astronaut overlap with center circle"
+
+### v2.2.21 - Narrow Screen Fix
+**Date:** [Current Date]
+
+#### Changes:
+- Fixed narrow screen layout issues
+  - More aggressive size reduction
+  - Minimum dimension based sizing
+  - Tighter spacing constraints
+  - Adjusted safe zones
+  - Files modified: `script.js`
+
+#### Technical Details:
+```javascript
+const minDimension = Math.min(viewport.width, viewport.height);
+const baseSize = isMobile() 
+    ? Math.min(20, minDimension / (maxAstronautsPerRow * 3))
+    : ASTRONAUT_SIZE;
+
+const dynamicSize = isMobile() 
+    ? Math.min(baseSize, Math.min(
+        viewport.width / (maxAstronautsPerRow * 4),
+        viewport.height / (maxAstronautsPerRow * 4)
+      ))
+    : ASTRONAUT_SIZE;
+```
+
+#### Commit Message:
+"Fixed astronaut sizing for narrow screens"
+
+### v2.2.22 - Scroll Behavior Update
+**Date:** [Current Date]
+
+#### Changes:
+- Updated scroll behavior
+  - Enabled mobile scrolling
+  - Prevented desktop scrolling
+  - Device-specific sizing
+  - Viewport optimization
+  - Files modified: `script.js`
+
+#### Technical Details:
+```javascript
+function getViewportDimensions() {
+    if (isMobile()) {
+        return { 
+            width: vw, 
+            height: vh, 
+            allowScroll: true 
+        };
+    } else {
+        return { 
+            width: document.documentElement.clientWidth,
+            height: document.documentElement.clientHeight,
+            allowScroll: false
+        };
+    }
+}
+```
+
+#### Commit Message:
+"Updated scroll behavior for mobile and desktop"
+
+### v2.2.23 - Mobile Detection Fix
+**Date:** [Current Date]
+
+#### Changes:
+- Fixed mobile detection timing
+  - Moved viewport check to top
+  - Dynamic constant calculation
+  - Added resize handler
+  - More reliable mobile detection
+  - Files modified: `script.js`
+
+#### Technical Details:
+```javascript
+window.addEventListener('resize', () => {
+    getAstronautData();
+});
+
+function getViewportDimensions() {
+    if (isMobile()) {
+        const vw = Math.min(window.innerWidth, document.documentElement.clientWidth);
+        const vh = window.innerHeight;
+        return { width: vw, height: vh, allowScroll: true };
+    }
+    // ...
+}
+```
+
+#### Commit Message:
+"Fixed mobile detection and viewport handling"
 
 ---
 

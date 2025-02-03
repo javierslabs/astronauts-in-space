@@ -3,11 +3,6 @@ const BASE_URL = 'http://api.open-notify.org/astros.json';
 const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
 const API_URL = CORS_PROXY + encodeURIComponent(BASE_URL);
 
-// Constants for layout
-const ASTRONAUT_SIZE = isMobile() ? 40 : 80; // Much smaller on mobile
-const HEADER_SAFE_ZONE = isMobile() ? 60 : 100; // Smaller header zone
-const CENTER_SAFE_ZONE = isMobile() ? 90 : 200; // Even smaller for mobile
-
 // Add rotation constant
 const MAX_ROTATION = 360; // Maximum rotation in degrees
 
@@ -15,21 +10,31 @@ const MAX_ROTATION = 360; // Maximum rotation in degrees
 const FLOAT_SPEED = 0.001;
 const FLOAT_AMPLITUDE = 15;
 
-// Add viewport check
+// Move this to the top of the file, before any other calculations
 function isMobile() {
     return window.innerWidth <= 768 || 
            navigator.userAgent.match(/iPhone|iPad|iPod|Android/i);
 }
 
-// Update constants for better mobile handling
+// Update viewport handling to be more reliable
 function getViewportDimensions() {
-    // Set minimum viewport dimensions
-    const minWidth = 320;  // Minimum width for mobile
-    const minHeight = 480; // Minimum height for mobile
-    
-    const vw = Math.max(minWidth, Math.min(document.documentElement.clientWidth, window.innerWidth));
-    const vh = Math.max(minHeight, Math.min(document.documentElement.clientHeight, window.innerHeight));
-    return { width: vw, height: vh };
+    if (isMobile()) {
+        // Get actual mobile viewport size, ignoring address bar
+        const vw = Math.min(window.innerWidth, document.documentElement.clientWidth);
+        const vh = window.innerHeight; // Use window.innerHeight for mobile
+        return { 
+            width: vw, 
+            height: vh, 
+            allowScroll: true 
+        };
+    } else {
+        // Desktop viewport
+        return { 
+            width: document.documentElement.clientWidth,
+            height: document.documentElement.clientHeight,
+            allowScroll: false
+        };
+    }
 }
 
 // Function to create astronaut elements
@@ -38,31 +43,42 @@ function createAstronautElements(astronauts) {
     container.innerHTML = '';
     
     const viewport = getViewportDimensions();
+    const isMobileView = isMobile(); // Get current state
     const numAstronauts = astronauts.length;
     
-    // More conservative sizing for mobile
-    const maxAstronautsPerRow = Math.ceil(Math.sqrt(numAstronauts + 4)); // Add padding for better spacing
-    const baseSize = isMobile() ? 20 : ASTRONAUT_SIZE; // Smaller base size for mobile
-    const dynamicSize = isMobile() 
+    // Calculate sizes based on current viewport
+    const baseSize = isMobileView ? 20 : 80;
+    const headerSafeZone = isMobileView ? 60 : 100;
+    const centerSafeZone = isMobileView ? 90 : 200;
+    
+    // Different sizing strategies for mobile and desktop
+    const maxAstronautsPerRow = Math.ceil(Math.sqrt(numAstronauts + 4));
+    const minDimension = Math.min(viewport.width, viewport.height);
+    
+    // Different sizing strategies for mobile and desktop
+    const dynamicSize = isMobileView 
         ? Math.min(baseSize, Math.min(
-            viewport.width / (maxAstronautsPerRow * 3), // More conservative division
-            viewport.height / (maxAstronautsPerRow * 3)
+            viewport.width / (maxAstronautsPerRow * 4),
+            viewport.height / (maxAstronautsPerRow * 4)
           ))
-        : ASTRONAUT_SIZE;
+        : Math.min(baseSize, viewport.height / (maxAstronautsPerRow * 2));
     
-    // Smaller safe zones for mobile
-    const safeCenterZone = isMobile() 
-        ? Math.min(60, Math.min(viewport.width, viewport.height) / 6)
-        : CENTER_SAFE_ZONE;
+    // Update CSS based on device type
+    document.body.style.overflow = viewport.allowScroll ? 'auto' : 'hidden';
     
-    const safeHeaderZone = isMobile() 
+    // Tighter spacing for narrow screens
+    const spacing = isMobileView 
+        ? dynamicSize * 1.01  // Extremely tight spacing
+        : baseSize * 1.2;
+    
+    // Smaller safe zones for narrow screens
+    const safeCenterZone = isMobileView 
+        ? Math.min(60, minDimension / 6) + dynamicSize
+        : centerSafeZone + baseSize;
+    
+    const safeHeaderZone = isMobileView 
         ? Math.min(30, viewport.height / 15)
-        : HEADER_SAFE_ZONE;
-    
-    // Very tight spacing for mobile
-    const spacing = isMobile() 
-        ? dynamicSize * 1.02  // Extremely tight spacing on mobile
-        : ASTRONAUT_SIZE * 1.2;
+        : headerSafeZone;
     
     const centerX = viewport.width / 2;
     const centerY = viewport.height / 2;
@@ -87,36 +103,38 @@ function createAstronautElements(astronauts) {
         // Random rotation
         const rotation = Math.random() * MAX_ROTATION;
         
+        // Add extra padding for rotation and movement
+        const rotationPadding = dynamicSize * 2; // Account for rotation space
+        
         // Find a valid position
         let validPosition = false;
         let x, y;
         let attempts = 0;
         
         while (!validPosition && attempts < 100) {
-            const padding = dynamicSize;
-            x = padding + Math.random() * (viewport.width - dynamicSize - padding * 2);
-            y = padding + Math.random() * (viewport.height - dynamicSize - padding * 2);
+            // Keep astronauts further from edges
+            x = rotationPadding + Math.random() * (viewport.width - rotationPadding * 2);
+            y = rotationPadding + Math.random() * (viewport.height - rotationPadding * 2);
             
-            // Adjust overlap checks for mobile
-            const isHeaderOverlap = y < safeHeaderZone;
-
-            const distanceToCenter = Math.hypot(x - centerX, y - centerY);
-            const isCenterOverlap = distanceToCenter < (safeCenterZone + dynamicSize / 2);
-
+            // Update boundary check to be more strict
+            const isBoundaryOverlap = 
+                x < rotationPadding || 
+                x > viewport.width - rotationPadding ||
+                y < rotationPadding || 
+                y > viewport.height - rotationPadding;
+            
+            // Update overlap checks
+            const isHeaderOverlap = y < (safeHeaderZone + rotationPadding);
+            const isCenterOverlap = Math.hypot(x - centerX, y - centerY) < 
+                (safeCenterZone + rotationPadding);
+            
             const isAstronautOverlap = occupiedSpaces.some(space => {
                 const distance = Math.hypot(x - space.x, y - space.y);
                 return distance < (spacing + dynamicSize / 2);
             });
 
-            // Add boundary check
-            const isBoundaryOverlap = 
-                x < dynamicSize || 
-                x > viewport.width - dynamicSize ||
-                y < dynamicSize || 
-                y > viewport.height - dynamicSize;
-
             validPosition = !isHeaderOverlap && !isCenterOverlap && 
-                            !isAstronautOverlap && !isBoundaryOverlap;
+                           !isAstronautOverlap && !isBoundaryOverlap;
             
             if (validPosition) {
                 occupiedSpaces.push({ x, y });
@@ -208,5 +226,11 @@ async function getAstronautData() {
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
+    getAstronautData();
+});
+
+// Add resize handler
+window.addEventListener('resize', () => {
+    // Recalculate astronauts on resize
     getAstronautData();
 }); 
