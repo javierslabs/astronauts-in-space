@@ -3,191 +3,6 @@ const BASE_URL = 'http://api.open-notify.org/astros.json';
 const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
 const API_URL = CORS_PROXY + encodeURIComponent(BASE_URL);
 
-// Add rotation constant
-const MAX_ROTATION = 360; // Maximum rotation in degrees
-
-// Add animation constants
-const FLOAT_SPEED = 0.001;
-const FLOAT_AMPLITUDE = 15;
-
-// Move this to the top of the file, before any other calculations
-function isMobile() {
-    return window.innerWidth <= 768 || 
-           navigator.userAgent.match(/iPhone|iPad|iPod|Android/i);
-}
-
-// Update viewport handling to be more reliable
-function getViewportDimensions() {
-    if (isMobile()) {
-        // Get actual mobile viewport size, ignoring address bar
-        const vw = Math.min(window.innerWidth, document.documentElement.clientWidth);
-        const vh = window.innerHeight; // Use window.innerHeight for mobile
-        return { 
-            width: vw, 
-            height: vh, 
-            allowScroll: true 
-        };
-    } else {
-        // Desktop viewport
-        return { 
-            width: document.documentElement.clientWidth,
-            height: document.documentElement.clientHeight,
-            allowScroll: false
-        };
-    }
-}
-
-// Function to create astronaut elements
-function createAstronautElements(astronauts) {
-    const container = document.getElementById('astronaut-container');
-    container.innerHTML = '';
-    
-    const viewport = getViewportDimensions();
-    const isMobileView = isMobile(); // Get current state
-    const numAstronauts = astronauts.length;
-    
-    // Calculate sizes based on current viewport
-    const baseSize = isMobileView ? 20 : 80;
-    const headerSafeZone = isMobileView ? 60 : 100;
-    const centerSafeZone = isMobileView ? 90 : 200;
-    
-    // Different sizing strategies for mobile and desktop
-    const maxAstronautsPerRow = Math.ceil(Math.sqrt(numAstronauts + 4));
-    const minDimension = Math.min(viewport.width, viewport.height);
-    
-    // Different sizing strategies for mobile and desktop
-    const dynamicSize = isMobileView 
-        ? Math.min(baseSize, Math.min(
-            viewport.width / (maxAstronautsPerRow * 4),
-            viewport.height / (maxAstronautsPerRow * 4)
-          ))
-        : Math.min(baseSize, viewport.height / (maxAstronautsPerRow * 2));
-    
-    // Update CSS based on device type
-    document.body.style.overflow = viewport.allowScroll ? 'auto' : 'hidden';
-    
-    // Tighter spacing for narrow screens
-    const spacing = isMobileView 
-        ? dynamicSize * 1.01  // Extremely tight spacing
-        : baseSize * 1.2;
-    
-    // Smaller safe zones for narrow screens
-    const safeCenterZone = isMobileView 
-        ? Math.min(60, minDimension / 6) + dynamicSize
-        : centerSafeZone + baseSize;
-    
-    const safeHeaderZone = isMobileView 
-        ? Math.min(30, viewport.height / 15)
-        : headerSafeZone;
-    
-    const centerX = viewport.width / 2;
-    const centerY = viewport.height / 2;
-    const occupiedSpaces = [];
-    const activeAstronauts = [];
-    
-    astronauts.forEach((astronaut, index) => {
-        const astronautDiv = document.createElement('div');
-        astronautDiv.className = 'astronaut';
-        
-        const astronautImg = document.createElement('img');
-        astronautImg.src = 'https://www.svgrepo.com/show/24715/astronaut-ingravity.svg';
-        astronautImg.alt = 'Astronaut';
-        astronautImg.className = 'astronaut-icon';
-        
-        // Mirror half of the astronauts
-        const isFlipped = index < Math.floor(astronauts.length / 2);
-        if (isFlipped) {
-            astronautImg.style.transform = 'scaleX(-1)';
-        }
-        
-        // Random rotation
-        const rotation = Math.random() * MAX_ROTATION;
-        
-        // Add extra padding for rotation and movement
-        const rotationPadding = dynamicSize * 2; // Account for rotation space
-        
-        // Find a valid position
-        let validPosition = false;
-        let x, y;
-        let attempts = 0;
-        
-        while (!validPosition && attempts < 100) {
-            // Keep astronauts further from edges
-            x = rotationPadding + Math.random() * (viewport.width - rotationPadding * 2);
-            y = rotationPadding + Math.random() * (viewport.height - rotationPadding * 2);
-            
-            // Update boundary check to be more strict
-            const isBoundaryOverlap = 
-                x < rotationPadding || 
-                x > viewport.width - rotationPadding ||
-                y < rotationPadding || 
-                y > viewport.height - rotationPadding;
-            
-            // Update overlap checks
-            const isHeaderOverlap = y < (safeHeaderZone + rotationPadding);
-            const isCenterOverlap = Math.hypot(x - centerX, y - centerY) < 
-                (safeCenterZone + rotationPadding);
-            
-            const isAstronautOverlap = occupiedSpaces.some(space => {
-                const distance = Math.hypot(x - space.x, y - space.y);
-                return distance < (spacing + dynamicSize / 2);
-            });
-
-            validPosition = !isHeaderOverlap && !isCenterOverlap && 
-                           !isAstronautOverlap && !isBoundaryOverlap;
-            
-            if (validPosition) {
-                occupiedSpaces.push({ x, y });
-            }
-            attempts++;
-        }
-        
-        if (validPosition) {
-            // Store astronaut data for animation
-            activeAstronauts.push({
-                element: astronautDiv,
-                x: x,
-                y: y,
-                rotation: rotation,
-                floatOffset: Math.random() * 1000 // Random starting point
-            });
-
-            // Initial position
-            updateAstronautPosition(activeAstronauts[activeAstronauts.length - 1]);
-            astronautDiv.appendChild(astronautImg);
-            container.appendChild(astronautDiv);
-        }
-    });
-
-    // Start animation
-    if (activeAstronauts.length > 0) {
-        animateAstronauts(activeAstronauts);
-    }
-}
-
-// Function to update a single astronaut's position
-function updateAstronautPosition(astronaut) {
-    // Convert rotation to radians and adjust for transform coordinate system
-    const angleInRadians = (astronaut.rotation - 90) * (Math.PI / 180);
-    
-    // Calculate offset based on rotation angle
-    const floatAmount = Math.sin(Date.now() * FLOAT_SPEED + astronaut.floatOffset) * FLOAT_AMPLITUDE;
-    const offsetX = Math.cos(angleInRadians) * floatAmount;
-    const offsetY = Math.sin(angleInRadians) * floatAmount;
-    
-    // Apply transform with rotated movement
-    astronaut.element.style.transform = `
-        translate(${astronaut.x + offsetX}px, ${astronaut.y + offsetY}px)
-        rotate(${astronaut.rotation}deg)
-    `;
-}
-
-// Animation loop
-function animateAstronauts(astronauts) {
-    astronauts.forEach(updateAstronautPosition);
-    requestAnimationFrame(() => animateAstronauts(astronauts));
-}
-
 // Function to update the astronaut count display
 function updateAstronautCount(count) {
     const countElement = document.getElementById('astronaut-count');
@@ -200,7 +15,7 @@ function updateAstronautCount(count) {
     }
 }
 
-// Update the getAstronautData function to create astronauts
+// Get astronaut data from API
 async function getAstronautData() {
     updateAstronautCount('loading');
     try {
@@ -218,9 +33,7 @@ async function getAstronautData() {
         }
     } catch (error) {
         console.error('API call failed. Error:', error);
-        const fallbackCount = 6;
-        updateAstronautCount(fallbackCount);
-        createAstronautElements(Array(fallbackCount).fill({ name: 'Astronaut' }));
+        updateAstronautCount(6); // Fallback count
     }
 }
 
@@ -229,8 +42,169 @@ document.addEventListener('DOMContentLoaded', () => {
     getAstronautData();
 });
 
-// Add resize handler
-window.addEventListener('resize', () => {
-    // Recalculate astronauts on resize
-    getAstronautData();
+// Add debounced resize handler
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Keep track of current astronauts
+let currentAstronauts = [];
+
+function createAstronautElements(astronauts) {
+    currentAstronauts = astronauts; // Store for resize events
+    const container = document.getElementById('astronaut-container');
+    container.innerHTML = '';
+    
+    const viewport = {
+        width: window.innerWidth,
+        height: window.innerHeight
+    };
+    
+    // Get header and circle boundaries
+    const header = document.querySelector('h1').getBoundingClientRect();
+    const circle = document.querySelector('.astronaut-counter').getBoundingClientRect();
+    
+    // Calculate astronaut size based on viewport
+    const astronautSize = Math.min(viewport.width, viewport.height) * 0.08;
+    
+    // Safe zones with padding
+    const safeZones = [
+        {
+            // Header zone - only around the header itself
+            x: 0,
+            y: header.top,
+            width: viewport.width,
+            height: header.height
+        },
+        {
+            // Circle zone
+            x: circle.left - astronautSize,
+            y: circle.top - astronautSize,
+            width: circle.width + (astronautSize * 2),
+            height: circle.height + (astronautSize * 2)
+        }
+    ];
+    
+    // Track placed astronauts
+    const placedAstronauts = [];
+    
+    function isValidPosition(x, y) {
+        // Add padding to viewport boundaries
+        const padding = astronautSize;
+        if (x < padding || x > viewport.width - padding ||
+            y < padding || y > viewport.height - padding) {
+            return false;
+        }
+        
+        // Check safe zones
+        for (const zone of safeZones) {
+            if (x > zone.x - astronautSize && x < zone.x + zone.width + astronautSize &&
+                y > zone.y - astronautSize && y < zone.y + zone.height + astronautSize) {
+                return false;
+            }
+        }
+        
+        // Check other astronauts with increased spacing
+        for (const placed of placedAstronauts) {
+            const distance = Math.hypot(x - placed.x, y - placed.y);
+            if (distance < astronautSize * 2) { // Increased spacing
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    function findValidPosition(attempts = 200) { // Increased attempts
+        while (attempts > 0) {
+            // Add padding to placement area
+            const padding = astronautSize;
+            const x = padding + (Math.random() * (viewport.width - (padding * 2)));
+            const y = padding + (Math.random() * (viewport.height - (padding * 2)));
+            
+            if (isValidPosition(x, y)) {
+                return { x, y };
+            }
+            attempts--;
+        }
+        return null;
+    }
+    
+    // Place astronauts
+    astronauts.forEach((astronaut, index) => {
+        const position = findValidPosition();
+        if (!position) return;
+        
+        const astronautDiv = document.createElement('div');
+        astronautDiv.className = 'astronaut';
+        
+        const astronautImg = document.createElement('img');
+        astronautImg.src = 'https://www.svgrepo.com/show/24715/astronaut-ingravity.svg';
+        astronautImg.alt = astronaut.name || 'Astronaut';
+        astronautImg.className = 'astronaut-icon';
+        
+        if (index < Math.floor(astronauts.length / 2)) {
+            astronautImg.style.transform = 'scaleX(-1)';
+        }
+        
+        const rotation = Math.random() * 360;
+        
+        astronautDiv.style.position = 'absolute';
+        astronautDiv.style.left = `${position.x}px`;
+        astronautDiv.style.top = `${position.y}px`;
+        astronautDiv.style.width = `${astronautSize}px`;
+        astronautDiv.style.height = `${astronautSize}px`;
+        astronautDiv.style.transform = `rotate(${rotation}deg)`;
+        
+        // Add click handler for banner
+        astronautDiv.addEventListener('click', (e) => {
+            e.stopPropagation();
+            
+            // Remove any existing banners
+            document.querySelectorAll('.astronaut-banner').forEach(b => b.remove());
+            
+            // Create new banner
+            const banner = document.createElement('div');
+            banner.className = 'astronaut-banner';
+            banner.textContent = astronaut.name || 'Name unavailable';
+            
+            // Position banner above astronaut
+            const rect = astronautDiv.getBoundingClientRect();
+            banner.style.position = 'fixed';
+            banner.style.left = `${rect.left + (rect.width / 2)}px`;
+            banner.style.top = `${rect.top - 15}px`;
+            banner.style.transform = `translateX(-50%) rotate(0deg)`;
+            
+            document.body.appendChild(banner);
+        });
+        
+        astronautDiv.appendChild(astronautImg);
+        container.appendChild(astronautDiv);
+        
+        placedAstronauts.push(position);
+    });
+}
+
+// Update resize handler to reposition banners
+window.addEventListener('resize', debounce(() => {
+    if (currentAstronauts.length > 0) {
+        // Remove existing banners
+        document.querySelectorAll('.astronaut-banner').forEach(b => b.remove());
+        createAstronautElements(currentAstronauts);
+    }
+}, 250));
+
+// Add click handler to close all banners when clicking anywhere
+document.body.addEventListener('click', (e) => {
+    if (!e.target.closest('.astronaut')) {
+        document.querySelectorAll('.astronaut-banner').forEach(b => b.remove());
+    }
 }); 

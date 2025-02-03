@@ -760,7 +760,7 @@ const dynamicSize = isMobile() ?
     Math.min(40, Math.min(viewportWidth / maxAstronautsPerRow, viewportHeight / 6)) : 
     ASTRONAUT_SIZE;
 
-const safeCenterZone = isMobile() ? Math.min(90, viewportHeight / 4) : CENTER_SAFE_ZONE;
+const safeCenterZone = isMobile() ? Math.min(90, viewportHeight / 4) : CENTER_SAFE_ZONE + ASTRONAUT_SIZE;
 ```
 
 #### Commit Message:
@@ -962,6 +962,484 @@ function getViewportDimensions() {
 
 #### Commit Message:
 "Fixed mobile detection and viewport handling"
+
+### v2.2.24 - Resize Handler Fix
+**Date:** [Current Date]
+
+#### Changes:
+- Fixed resize behavior
+  - Added debounce to resize handler
+  - Prevented rapid recalculations
+  - Smoother screen size transitions
+  - Files modified: `script.js`
+
+#### Technical Details:
+```javascript
+function debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), wait);
+    };
+}
+
+window.addEventListener('resize', debounce(() => {
+    getAstronautData();
+}, 250));
+```
+
+#### Commit Message:
+"Fixed screen resize handling with debounce"
+
+### v2.2.25 - Small Screen Size Fix
+**Date:** [Current Date]
+
+#### Changes:
+- Fixed small screen sizing
+  - More aggressive size reduction
+  - Maximum 15px on mobile
+  - Proportional to screen size
+  - Tighter spacing rules
+  - Files modified: `script.js`
+
+#### Technical Details:
+```javascript
+const baseSize = isMobileView 
+    ? Math.min(15, minDimension / (maxAstronautsPerRow * 5))
+    : Math.min(80, minDimension / (maxAstronautsPerRow * 2));
+
+const spacing = isMobileView 
+    ? baseSize * 1.2
+    : baseSize * 1.5;
+```
+
+#### Commit Message:
+"Fixed astronaut sizing for very small screens"
+
+### v2.2.26 - Grid Layout Implementation
+**Date:** [Current Date]
+
+#### Changes:
+- Redesigned astronaut positioning
+  - Grid-based layout
+  - Automatic spacing calculation
+  - Better center circle avoidance
+  - Organized distribution
+  - Files modified: `script.js`
+
+#### Technical Details:
+```javascript
+// Calculate grid dimensions
+const rows = Math.ceil(Math.sqrt(numAstronauts));
+const cols = Math.ceil(numAstronauts / rows);
+
+// Calculate grid spacing
+const xSpacing = viewport.width / (cols + 1);
+const ySpacing = viewport.height / (rows + 1);
+```
+
+#### Commit Message:
+"Implemented grid-based astronaut layout"
+
+### v2.2.27 - Static Grid Layout
+**Date:** [Current Date]
+
+#### Changes:
+- Implemented static grid layout
+  - Removed all animations
+  - Fixed grid positioning
+  - Golden angle rotation
+  - Simplified code
+  - Files modified: `script.js`
+
+#### Technical Details:
+```javascript
+// Calculate grid layout
+const rows = Math.ceil(Math.sqrt(numAstronauts));
+const cols = Math.ceil(numAstronauts / rows);
+
+// Static rotation using golden angle
+const rotation = (index * 137.5) % 360;
+```
+
+#### Commit Message:
+"Switched to static grid-based layout"
+
+### v2.2.28 - Spacing and Scroll Fix
+**Date:** [Current Date]
+
+#### Changes:
+- Fixed astronaut spacing and scroll
+  - Minimum spacing enforcement
+  - Enabled scrolling on all devices
+  - Fixed grid calculations
+  - Dynamic container height
+  - Files modified: `script.js`
+
+#### Technical Details:
+```javascript
+const minSpacing = isMobileView ? 50 : 100;
+const cols = Math.floor(viewport.width / minSpacing);
+const ySpacing = minSpacing * 1.5;
+
+const containerHeight = ySpacing * (rows + 1);
+document.getElementById('astronaut-container').style.height = 
+    `${containerHeight}px`;
+```
+
+#### Commit Message:
+"Fixed astronaut spacing and enabled scrolling"
+
+### v2.2.29 - Grid Distribution Fix
+**Date:** [Current Date]
+
+#### Changes:
+- Improved astronaut distribution
+  - Full viewport height utilization
+  - Even vertical spacing
+  - Better grid centering
+  - Minimum container height
+  - Files modified: `script.js`
+
+#### Technical Details:
+```javascript
+// Calculate spacing to use full viewport height
+const ySpacing = viewport.height / (rows + 1);
+const yMargin = (viewport.height - (ySpacing * (rows - 1))) / 2;
+
+// Update container to use full viewport
+container.style.height = '100vh';
+container.style.minHeight = '600px';
+```
+
+#### Commit Message:
+"Fixed astronaut distribution across viewport"
+
+### v2.2.30 - Overlap Prevention
+**Date:** [Current Date]
+
+#### Changes:
+- Improved grid system to prevent overlaps
+  - Increased minimum spacing
+  - Fixed grid calculations
+  - Guaranteed separation between astronauts
+  - Better center circle avoidance
+  - Files modified: `script.js`
+
+#### Technical Details:
+```javascript
+const minSpacing = isMobileView ? 80 : 150;
+const xSpacing = viewport.width / (cols + 1);
+const ySpacing = minSpacing * 1.5;
+
+// Ensure minimum container height
+const totalHeight = ySpacing * (rows + 1);
+container.style.minHeight = `${Math.max(totalHeight, viewport.height)}px`;
+```
+
+#### Commit Message:
+"Implemented strict spacing to prevent overlaps"
+
+### v2.2.31 - Resize Safe Zone Fix
+**Date:** [Current Date]
+
+#### Changes:
+- Fixed resize overlap issues
+  - Pre-calculated safe positions
+  - Fixed center safe zone
+  - Position shuffling
+  - Better position validation
+  - Files modified: `script.js`
+
+#### Technical Details:
+```javascript
+// Calculate valid positions avoiding center
+const positions = [];
+for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+        const x = (viewport.width * (col + 1)) / (cols + 1);
+        const y = minSpacing + (row * ySpacing);
+        
+        const distanceToCenter = Math.hypot(x - centerX, y - centerY);
+        if (distanceToCenter > centerSafeZone) {
+            positions.push({ x, y });
+        }
+    }
+}
+```
+
+#### Commit Message:
+"Fixed resize overlap with pre-calculated positions"
+
+### v2.2.32 - Grid Layout with Circle Fix
+**Date:** [Current Date]
+
+#### Changes:
+- Fixed center circle visibility
+  - Restored circle styles
+  - Maintained grid layout
+  - Proper circle dimensions
+  - Mobile responsiveness
+  - Files modified: `style.css`
+
+#### Technical Details:
+```css
+.astronaut-counter {
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    width: 250px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+}
+```
+
+#### Commit Message:
+"Fixed center circle visibility while maintaining grid layout"
+
+### v2.2.33 - Text Alignment Fix
+**Date:** [Current Date]
+
+#### Changes:
+- Fixed text alignment issues
+  - Fixed header overlap
+  - Centered circle text
+  - Added header background
+  - Adjusted spacing
+  - Files modified: `style.css`
+
+#### Technical Details:
+```css
+h1 {
+    position: fixed;
+    z-index: 20;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 1rem;
+}
+
+.astronaut-counter {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+```
+
+#### Commit Message:
+"Fixed header overlap and circle text alignment"
+
+### v2.2.34 - Header Overlap Fix
+**Date:** [Current Date]
+
+#### Changes:
+- Fixed header overlap with circle
+  - Adjusted header positioning
+  - Reduced padding and margins
+  - Better mobile text handling
+  - Improved spacing
+  - Files modified: `style.css`
+
+#### Technical Details:
+```css
+h1 {
+    top: 1rem;
+    padding: 0.5rem;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1rem;
+        padding: 0.3rem;
+        top: 0.5rem;
+        width: auto;
+        min-width: 200px;
+        max-width: 90%;
+    }
+}
+```
+
+#### Commit Message:
+"Fixed header overlap with circle on small screens"
+
+### v2.2.35 - Circle Text Resize Fix
+**Date:** [Current Date]
+
+#### Changes:
+- Fixed circle text resizing
+  - Responsive font sizing
+  - Text container constraints
+  - Better text wrapping
+  - Dynamic spacing
+  - Files modified: `style.css`
+
+#### Technical Details:
+```css
+h2 {
+    font-size: min(0.9rem, calc(100% - 0.2rem));
+    max-width: 90%;
+    word-wrap: break-word;
+}
+
+#astronaut-count {
+    font-size: min(5rem, calc(100vw / 12));
+}
+```
+
+#### Commit Message:
+"Fixed circle text resizing for small screens"
+
+### v2.2.36 - Header Spacing Fix
+**Date:** [Current Date]
+
+#### Changes:
+- Fixed header spacing
+  - Added header height variables
+  - Consistent spacing below header
+  - Better mobile adaptation
+  - Proper content flow
+  - Files modified: `style.css`
+
+#### Technical Details:
+```css
+:root {
+    --header-height: 4rem;
+    --mobile-header-height: 3rem;
+}
+
+.astronaut-container {
+    margin-top: var(--header-height);
+}
+```
+
+#### Commit Message:
+"Fixed astronaut positioning below header"
+
+### v2.2.37 - Scattered Layout
+**Date:** [Current Date]
+
+#### Changes:
+- Implemented scattered astronaut layout
+  - Random position selection
+  - Strict safe zone enforcement
+  - Better space utilization
+  - Grid-based scatter
+  - Files modified: `script.js`
+
+#### Technical Details:
+```javascript
+// Create grid with more cells than needed
+const gridCols = Math.floor(viewport.width / minSpacing);
+const gridRows = Math.ceil((viewport.height - headerSafeZone) / minSpacing);
+
+// Validate positions against safe zones
+const distanceToCircle = Math.hypot(x - circleSafeZone.x, y - circleSafeZone.y);
+if (distanceToCircle > circleSafeZone.radius + baseSize) {
+    positions.push({ x, y });
+}
+```
+
+#### Commit Message:
+"Implemented scattered astronaut layout with safe zones"
+
+### v2.2.38 - Z-Index Fix
+**Date:** [Current Date]
+
+#### Changes:
+- Fixed z-index stacking
+  - Proper layer hierarchy
+  - Increased circle safe zone
+  - Stricter position validation
+  - No overlap with circle
+  - Files modified: `style.css`, `script.js`
+
+#### Technical Details:
+```css
+h1 { z-index: 30; }
+.astronaut-counter { z-index: 20; }
+.astronaut { z-index: 15; }
+.astronaut-container { z-index: 10; }
+```
+
+#### Commit Message:
+"Fixed z-index to prevent astronauts appearing behind circle"
+
+### v2.2.39 - Overlap Prevention Enhancement
+**Date:** [Current Date]
+
+#### Changes:
+- Enhanced overlap prevention
+  - Increased minimum spacing
+  - More positioning attempts
+  - Stricter validation
+  - Better padding
+  - Files modified: `script.js`
+
+#### Technical Details:
+```javascript
+const minDistance = baseSize * 3; // Increased spacing
+const maxAttempts = 1000; // More attempts
+
+const isValidPosition = 
+    distanceToCircle > circleSafeZone.radius &&
+    !positions.some(pos => 
+        Math.hypot(x - pos.x, y - pos.y) < minDistance
+    );
+```
+
+#### Commit Message:
+"Enhanced astronaut spacing and overlap prevention"
+
+### v2.2.40 - Grid Layout Restructure
+**Date:** [Current Date]
+
+#### Changes:
+- Implemented CSS Grid layout
+  - Responsive column system
+  - Better astronaut distribution
+  - Improved collision prevention
+  - Structured cell positioning
+  - Files modified: `style.css`, `script.js`
+
+#### Technical Details:
+```css
+.astronaut-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    place-items: center;
+}
+```
+
+#### Commit Message:
+"Restructured layout using CSS Grid for better distribution"
+
+### v2.2.41 - Random Grid Placement
+**Date:** [Current Date]
+
+#### Changes:
+- Added random positioning within grid
+  - Random offsets within cells
+  - Maintained grid structure
+  - Position shuffling
+  - Better distribution
+  - Files modified: `script.js`
+
+#### Technical Details:
+```javascript
+// Add random offset within cell
+const randomX = (Math.random() - 0.5) * (cellWidth * 0.5);
+const randomY = (Math.random() - 0.5) * (cellHeight * 0.5);
+
+// Calculate base position plus random offset
+const x = (col + 0.5) * cellWidth + randomX;
+const y = (row + 0.5) * cellHeight + randomY;
+```
+
+#### Commit Message:
+"Added random positioning within grid structure"
 
 ---
 
