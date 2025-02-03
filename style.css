@@ -104,8 +104,8 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.3s ease;
     cursor: pointer;
+    transform: rotate(var(--rotation));
 }
 
 .astronaut-icon {
@@ -141,8 +141,37 @@ h2 {
     }
 }
 
+@keyframes float {
+    0% {
+        transform: translate(0, 0);
+    }
+    25% {
+        transform: translate(var(--move-x1), var(--move-y1));
+    }
+    50% {
+        transform: translate(var(--move-x2), var(--move-y2));
+    }
+    75% {
+        transform: translate(var(--move-x3), var(--move-y3));
+    }
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+/* Wrapper to keep banner with astronaut */
+.astronaut-wrapper {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform-origin: center center;
+    animation: float var(--float-duration) ease-in-out infinite;
+    animation-delay: var(--float-delay);
+}
+
 .astronaut-banner {
-    position: fixed;
+    position: absolute;
     background-color: rgba(0, 0, 0, 0.8);
     color: white;
     padding: 0.5rem 1rem;
@@ -151,6 +180,54 @@ h2 {
     white-space: nowrap;
     z-index: 50;
     pointer-events: none;
-    transform-origin: center bottom;
-    margin-top: -5px;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.subtitle {
+    position: fixed;
+    width: 100%;
+    top: calc(min(4vh, 1rem) + var(--header-font) + min(2vh, 0.5rem) + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    z-index: 100;
+    font-size: calc(var(--header-font) * 0.7);
+    font-weight: 300;
+    text-align: center;
+    background-color: rgb(0, 0, 0);
+    padding: min(1vh, 0.3rem);
+    white-space: nowrap;
+}
+
+/* Update mobile styles */
+@media (max-width: 768px) {
+    .subtitle {
+        font-size: calc(var(--base-size) * 0.08);
+        padding: min(1vh, 0.2rem);
+    }
+}
+
+.footnote {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: calc(var(--header-font) * 0.5);
+    font-weight: 300;
+    text-align: center;
+    background-color: rgb(0, 0, 0);
+    padding: min(1vh, 0.3rem);
+    white-space: nowrap;
+    z-index: 100;
+    opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+    .footnote {
+        font-size: calc(var(--base-size) * 0.06);
+        padding: min(1vh, 0.2rem);
+        bottom: 0.5rem;
+    }
 }
