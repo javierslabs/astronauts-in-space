@@ -12,6 +12,12 @@ function updateAstronautCount(count) {
     } else {
         countElement.textContent = count;
         countElement.classList.remove('loading');
+        
+        // Update the subtitle text with spaces only after loading is complete
+        const subtitle = document.querySelector('h2');
+        if (subtitle) {
+            subtitle.textContent = " currently in orbit ";
+        }
     }
 }
 
@@ -21,79 +27,123 @@ async function getAstronautData() {
     
     const BASE_URL = 'http://api.open-notify.org/astros.json';
     
-    // Try allorigins first
-    try {
-        const allOriginsProxy = 'https://api.allorigins.win/raw?url=';
-        const response = await fetch(allOriginsProxy + encodeURIComponent(BASE_URL));
-        const data = await response.json();
-        
-        if (data && Array.isArray(data.people)) {
-            const count = data.people.length;
-            console.log('Success with allorigins proxy');
-            // Remove any existing footnote
-            document.querySelector('.footnote')?.remove();
-            // Add success footnote
-            const footnote = document.createElement('div');
-            footnote.className = 'footnote';
-            footnote.textContent = 'Data obtained successfully';
-            document.body.appendChild(footnote);
-            updateAstronautCount(count);
-            createAstronautElements(data.people);
-            return;
+    // List of CORS proxies with their specific URL formats
+    const proxyConfigs = [
+        {
+            name: 'corsproxy.io',
+            url: 'https://corsproxy.io/?',
+            format: (url) => `${proxyConfigs[0].url}${encodeURIComponent(url)}`
+        },
+        {
+            name: 'cors.sh',
+            url: 'https://proxy.cors.sh/',
+            format: (url) => `${proxyConfigs[1].url}${url}`
+        },
+        {
+            name: 'allorigins',
+            url: 'https://api.allorigins.win/raw?url=',
+            format: (url) => `${proxyConfigs[2].url}${encodeURIComponent(url)}`
         }
-    } catch (error) {
-        console.log('allorigins proxy failed:', error);
-        
-        // Try other proxies in sequence
-        const backupProxies = [
-            'https://corsproxy.io/?',
-            'https://api.codetabs.com/v1/proxy?quest=',
-            'https://proxy.cors.sh/'
-        ];
-        
-        for (const proxy of backupProxies) {
-            try {
-                const response = await fetch(proxy + encodeURIComponent(BASE_URL));
-                const data = await response.json();
-                
-                if (data && Array.isArray(data.people)) {
-                    const count = data.people.length;
-                    console.log('Success with backup proxy:', proxy);
-                    updateAstronautCount(count);
-                    createAstronautElements(data.people);
-                    return;
-                }
-            } catch (error) {
-                console.log(`Failed with proxy ${proxy}:`, error);
-                continue;
+    ];
+    
+    // Try each proxy
+    for (const proxy of proxyConfigs) {
+        try {
+            console.log(`Trying ${proxy.name}...`);
+            const response = await fetch(proxy.format(BASE_URL));
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
+            
+            const data = await response.json();
+            
+            if (data && Array.isArray(data.people)) {
+                const count = data.people.length;
+                console.log(`Success with ${proxy.name}`);
+                
+                // Remove any existing footnote
+                document.querySelector('.footnote')?.remove();
+                
+                // Add success footnote
+                const footnote = document.createElement('div');
+                footnote.className = 'footnote';
+                footnote.textContent = 'Data obtained successfully';
+                document.body.appendChild(footnote);
+                
+                updateAstronautCount(count);
+                createAstronautElements(data.people);
+                return;
+            } else {
+                throw new Error('Invalid data format');
+            }
+        } catch (error) {
+            console.log(`Failed with ${proxy.name}:`, error.message);
+            continue;
         }
     }
     
     // If all proxies fail, use fallback data
     console.error('All proxies failed. Using fallback data');
     const fallbackData = {
-        people: Array(11).fill().map(() => ({
-            name: 'Name unavailable'
-        }))
+        people: [
+            { craft: "ISS", name: "Oleg Kononenko" },
+            { craft: "ISS", name: "Nikolai Chub" },
+            { craft: "ISS", name: "Tracy Caldwell Dyson" },
+            { craft: "ISS", name: "Matthew Dominick" },
+            { craft: "ISS", name: "Michael Barratt" },
+            { craft: "ISS", name: "Jeanette Epps" },
+            { craft: "ISS", name: "Alexander Grebenkin" },
+            { craft: "ISS", name: "Butch Wilmore" },
+            { craft: "ISS", name: "Sunita Williams" },
+            { craft: "Tiangong", name: "Li Guangsu" },
+            { craft: "Tiangong", name: "Li Cong" },
+            { craft: "Tiangong", name: "Ye Guangfu" }
+        ],
+        number: 12,
+        message: "success"
     };
-    updateAstronautCount(fallbackData.people.length);
-    createAstronautElements(fallbackData.people);
-
-    // Add footnote for fallback data
+    
+    // Remove any existing footnote
+    document.querySelector('.footnote')?.remove();
+    
+    // Add fallback footnote with timestamp
     const footnote = document.createElement('div');
     footnote.className = 'footnote';
-    footnote.textContent = 'All proxies failed. Using fallback data';
+    footnote.textContent = 'All proxies failed. Using fallback data from February 3, 2024';
     document.body.appendChild(footnote);
+    
+    updateAstronautCount(fallbackData.people.length);
+    createAstronautElements(fallbackData.people);
 }
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
+    // Remove any existing header elements
+    document.querySelectorAll('h1, .header-container').forEach(el => el.remove());
+    
+    // Create header container
+    const headerContainer = document.createElement('div');
+    headerContainer.className = 'header-container';
+    
+    // Create and add title
+    const title = document.createElement('h1');
+    title.textContent = 'ASTRONAUTS IN SPACE';
+    headerContainer.appendChild(title);
+    
     // Create and add subtitle
     const subtitle = document.createElement('div');
     subtitle.className = 'subtitle';
     subtitle.textContent = 'Click on any astronaut to know their names!';
-    document.body.appendChild(subtitle);
+    headerContainer.appendChild(subtitle);
+    
+    document.body.appendChild(headerContainer);
+    
+    // Create container for astronauts
+    const container = document.createElement('div');
+    container.id = 'astronaut-container';
+    container.className = 'astronaut-container';
+    document.body.appendChild(container);
     
     // Start getting astronaut data
     getAstronautData();
@@ -136,7 +186,7 @@ function createUniqueFloatParameters() {
 }
 
 function createAstronautElements(astronauts) {
-    currentAstronauts = astronauts; // Store for resize events
+    currentAstronauts = astronauts;
     const container = document.getElementById('astronaut-container');
     container.innerHTML = '';
     
@@ -145,94 +195,134 @@ function createAstronautElements(astronauts) {
         height: window.innerHeight
     };
     
-    // Get header, subtitle, circle and footnote boundaries
-    const header = document.querySelector('h1').getBoundingClientRect();
-    const subtitle = document.querySelector('.subtitle').getBoundingClientRect();
+    // Get all boundaries first to ensure they exist
+    const header = document.querySelector('.header-container').getBoundingClientRect();
     const circle = document.querySelector('.astronaut-counter').getBoundingClientRect();
-    
-    // Calculate astronaut size based on viewport
-    const astronautSize = Math.min(viewport.width, viewport.height) * 0.08;
-    
-    // Safe zones with padding
-    const safeZones = [
-        {
-            // Header and subtitle zone
-            x: 0,
-            y: header.top,
-            width: viewport.width,
-            height: subtitle.bottom - header.top
-        },
-        {
-            // Circle zone
-            x: circle.left - astronautSize,
-            y: circle.top - astronautSize,
-            width: circle.width + (astronautSize * 2),
-            height: circle.height + (astronautSize * 2)
-        }
-    ];
-    
-    // Add footnote zone if footnote exists
     const footnote = document.querySelector('.footnote');
-    if (footnote) {
-        const footnoteBounds = footnote.getBoundingClientRect();
-        safeZones.push({
-            // Footnote zone
-            x: 0,
-            y: footnoteBounds.top - astronautSize,
-            width: viewport.width,
-            height: viewport.height - footnoteBounds.top + astronautSize
-        });
-    }
     
-    // Track placed astronauts
-    const placedAstronauts = [];
+    // Initial astronaut size calculation
+    let baseAstronautSize = Math.min(viewport.width, viewport.height) * 0.08;
+    const minAstronautSize = Math.min(viewport.width, viewport.height) * 0.03; // Minimum size
     
-    function isValidPosition(x, y) {
-        // Add padding to viewport boundaries
-        const padding = astronautSize;
-        if (x < padding || x > viewport.width - padding ||
-            y < padding || y > viewport.height - padding) {
-            return false;
-        }
+    function attemptPlacement(currentSize) {
+        const placedAstronauts = [];
+        let allPlaced = true;
         
-        // Check safe zones
-        for (const zone of safeZones) {
-            if (x > zone.x - astronautSize && x < zone.x + zone.width + astronautSize &&
-                y > zone.y - astronautSize && y < zone.y + zone.height + astronautSize) {
-                return false;
+        // Safe zones with padding
+        const safeZones = [
+            {
+                // Header zone
+                x: 0,
+                y: header.top,
+                width: viewport.width,
+                height: header.height + currentSize
+            },
+            {
+                // Circle zone
+                x: circle.left - currentSize,
+                y: circle.top - currentSize,
+                width: circle.width + (currentSize * 2),
+                height: circle.height + (currentSize * 2)
             }
+        ];
+        
+        // Add footnote zone if it exists
+        if (footnote) {
+            const footnoteBounds = footnote.getBoundingClientRect();
+            safeZones.push({
+                x: 0,
+                y: footnoteBounds.top - currentSize,
+                width: viewport.width,
+                height: viewport.height - footnoteBounds.top + currentSize
+            });
         }
         
-        // Check other astronauts with increased spacing
-        for (const placed of placedAstronauts) {
-            const distance = Math.hypot(x - placed.x, y - placed.y);
-            if (distance < astronautSize * 2) { // Increased spacing
-                return false;
-            }
-        }
-        
-        return true;
-    }
-    
-    function findValidPosition(attempts = 200) { // Increased attempts
-        while (attempts > 0) {
-            // Add padding to placement area
-            const padding = astronautSize;
-            const x = padding + (Math.random() * (viewport.width - (padding * 2)));
-            const y = padding + (Math.random() * (viewport.height - (padding * 2)));
+        function isValidPosition(x, y) {
+            const padding = currentSize;
+            const bannerHeight = 40;
+            const sidePadding = currentSize * 1.5;
+            const topPadding = padding + bannerHeight;
             
-            if (isValidPosition(x, y)) {
-                return { x, y };
+            // Check viewport boundaries
+            if (x < sidePadding || x > viewport.width - sidePadding ||
+                y < topPadding || y > viewport.height - padding) {
+                return false;
             }
-            attempts--;
+            
+            // Check safe zones
+            for (const zone of safeZones) {
+                const extraPadding = currentSize * 0.5;
+                if (x > zone.x - extraPadding && 
+                    x < zone.x + zone.width + extraPadding &&
+                    y > zone.y - extraPadding && 
+                    y < zone.y + zone.height + extraPadding) {
+                    return false;
+                }
+            }
+            
+            // Check other astronauts
+            for (const placed of placedAstronauts) {
+                const distance = Math.hypot(x - placed.x, y - placed.y);
+                if (distance < currentSize * 2.5) {
+                    return false;
+                }
+            }
+            
+            return true;
         }
-        return null;
+        
+        function findValidPosition(attempts = 200) {
+            while (attempts > 0) {
+                const padding = currentSize;
+                const bannerHeight = 40;
+                const sidePadding = currentSize * 1.5;
+                const topPadding = padding + bannerHeight;
+                
+                const x = sidePadding + (Math.random() * (viewport.width - (sidePadding * 2)));
+                const y = topPadding + (Math.random() * (viewport.height - topPadding - padding));
+                
+                if (isValidPosition(x, y)) {
+                    return { x, y };
+                }
+                attempts--;
+            }
+            return null;
+        }
+        
+        // Try to place all astronauts
+        astronauts.forEach((astronaut, index) => {
+            const position = findValidPosition();
+            if (!position) {
+                allPlaced = false;
+                return false; // Exit forEach early
+            }
+            placedAstronauts.push(position);
+        });
+        
+        return { success: allPlaced, positions: placedAstronauts };
     }
     
-    // Place astronauts
-    astronauts.forEach((astronaut, index) => {
-        const position = findValidPosition();
-        if (!position) return;
+    // Try placing astronauts with progressively smaller sizes
+    let currentSize = baseAstronautSize;
+    let placementResult;
+    
+    while (currentSize >= minAstronautSize) {
+        placementResult = attemptPlacement(currentSize);
+        if (placementResult.success) break;
+        currentSize *= 0.9; // Reduce size by 10%
+    }
+    
+    // If we couldn't place all astronauts even at minimum size
+    if (!placementResult.success) {
+        const footnote = document.querySelector('.footnote');
+        if (footnote) {
+            footnote.textContent += ' (Not all astronauts could be displayed due to space constraints)';
+        }
+    }
+    
+    // Create astronaut elements with final positions
+    placementResult.positions.forEach((position, index) => {
+        const astronaut = astronauts[index];
         
         // Create wrapper
         const wrapper = document.createElement('div');
@@ -240,7 +330,7 @@ function createAstronautElements(astronauts) {
         wrapper.style.left = `${position.x}px`;
         wrapper.style.top = `${position.y}px`;
         
-        // Add unique floating parameters
+        // Rest of the astronaut creation code remains the same
         const floatParams = createUniqueFloatParameters();
         wrapper.style.setProperty('--move-x1', `${floatParams.x1}px`);
         wrapper.style.setProperty('--move-y1', `${floatParams.y1}px`);
@@ -265,29 +355,21 @@ function createAstronautElements(astronauts) {
         
         const rotation = Math.random() * 360;
         astronautDiv.style.setProperty('--rotation', `${rotation}deg`);
-        astronautDiv.style.width = `${astronautSize}px`;
-        astronautDiv.style.height = `${astronautSize}px`;
+        astronautDiv.style.width = `${currentSize}px`;
+        astronautDiv.style.height = `${currentSize}px`;
         
-        // Add click handler for banner
         wrapper.addEventListener('click', (e) => {
             e.stopPropagation();
-            
-            // Remove any existing banners
             document.querySelectorAll('.astronaut-banner').forEach(b => b.remove());
-            
-            // Create new banner
             const banner = document.createElement('div');
             banner.className = 'astronaut-banner';
             banner.textContent = astronaut.name || 'Name unavailable';
-            
             wrapper.appendChild(banner);
         });
         
         astronautDiv.appendChild(astronautImg);
         wrapper.appendChild(astronautDiv);
         container.appendChild(wrapper);
-        
-        placedAstronauts.push(position);
     });
 }
 
