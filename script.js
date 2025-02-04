@@ -348,7 +348,7 @@ function createAstronautElements(astronauts) {
         astronautDiv.className = 'astronaut';
         
         const astronautImg = document.createElement('img');
-        astronautImg.src = 'https://www.svgrepo.com/show/24715/astronaut-ingravity.svg';
+        astronautImg.src = './images/astronaut.svg';
         astronautImg.alt = astronaut.name || 'Astronaut';
         astronautImg.className = 'astronaut-icon';
         
