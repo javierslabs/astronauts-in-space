@@ -104,6 +104,7 @@ h2 {
     width: 100vw;
     height: 100vh;
     z-index: 1;
+    touch-action: none; /* Prevent touch scrolling */
 }
 
 /* Individual astronaut */
@@ -235,4 +236,17 @@ h2 {
         padding: min(1vh, 0.2rem);
         bottom: 0.5rem;
     }
+}
+
+/* Prevent scrolling */
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    -webkit-overflow-scrolling: touch; /* For iOS */
+    overscroll-behavior: none; /* Prevent pull-to-refresh */
+    touch-action: none; /* Prevent all browser touch actions */
 }
