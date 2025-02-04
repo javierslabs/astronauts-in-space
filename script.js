@@ -214,11 +214,11 @@ function createAstronautElements(astronauts) {
         // Safe zones with padding
         const safeZones = [
             {
-                // Header zone with padding of 1.5 times astronaut size below
+                // Header zone with reduced padding
                 x: 0,
                 y: header.top,
                 width: viewport.width,
-                height: header.height + (currentSize * 1.5) // Changed to 1.5 times astronaut size
+                height: header.height + (currentSize * 1.2) // Reduced from 1.5 to 1.2
             },
             {
                 // Circle zone
