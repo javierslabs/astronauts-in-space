@@ -16,7 +16,10 @@ function updateAstronautCount(count) {
         // Update the subtitle text with spaces only after loading is complete
         const subtitle = document.querySelector('h2');
         if (subtitle) {
-            subtitle.textContent = " currently in orbit ";
+            subtitle.innerHTML = `
+                <span>currently</span>
+                <span>in orbit</span>
+            `;
         }
     }
 }
@@ -211,11 +214,11 @@ function createAstronautElements(astronauts) {
         // Safe zones with padding
         const safeZones = [
             {
-                // Header zone
+                // Header zone with padding of 1.5 times astronaut size below
                 x: 0,
                 y: header.top,
                 width: viewport.width,
-                height: header.height + currentSize
+                height: header.height + (currentSize * 1.5) // Changed to 1.5 times astronaut size
             },
             {
                 // Circle zone
