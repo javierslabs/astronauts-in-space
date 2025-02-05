@@ -1,2 +1,38 @@
+# Node.js dependencies
 node_modules/
-astronauts.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Logs
+logs/
+*.log
+logs/*.log
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# OS and Editor Files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build files
+dist/
+out/
+coverage/
+
+# Ignore all JSON files EXCEPT astronauts.json
+*.json
+!astronauts.json
+
+# Ignore env and secret files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

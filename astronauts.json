@@ -1,0 +1,88 @@
+{
+  "people": [
+    {
+      "name": "Aleksey Ovchinin",
+      "country": "Russia",
+      "wikipedia": "https://en.wikipedia.org/wiki/Aleksey_Ovchinin",
+      "station": "International",
+      "expedition": "Expedition 72",
+      "spaceflight": "Soyuz MS"
+    },
+    {
+      "name": "Ivan Vagner",
+      "country": "Russia",
+      "wikipedia": "https://en.wikipedia.org/wiki/Ivan_Vagner",
+      "station": "International",
+      "expedition": "Expedition 72",
+      "spaceflight": "Soyuz MS"
+    },
+    {
+      "name": "Donald Pettit",
+      "country": "United States",
+      "wikipedia": "https://en.wikipedia.org/wiki/Donald_Pettit",
+      "station": "International",
+      "expedition": "Expedition 72",
+      "spaceflight": "Soyuz MS"
+    },
+    {
+      "name": "Nick Hague",
+      "country": "United States",
+      "wikipedia": "https://en.wikipedia.org/wiki/Nick_Hague",
+      "station": "International",
+      "expedition": "Expedition 72",
+      "spaceflight": "SpaceX Crew"
+    },
+    {
+      "name": "Aleksandr Gorbunov",
+      "country": "Russia",
+      "wikipedia": "https://en.wikipedia.org/wiki/Aleksandr_Gorbunov",
+      "station": "International",
+      "expedition": "Expedition 72",
+      "spaceflight": "SpaceX Crew"
+    },
+    {
+      "name": "Barry E. Wilmore",
+      "country": "United States",
+      "wikipedia": "https://en.wikipedia.org/wiki/Barry_Wilmore",
+      "station": "International",
+      "expedition": "Expedition 72",
+      "spaceflight": "SpaceX Crew"
+    },
+    {
+      "name": "Sunita Williams",
+      "country": "United States",
+      "wikipedia": "https://en.wikipedia.org/wiki/Sunita_Williams",
+      "station": "International",
+      "expedition": "Expedition 72",
+      "spaceflight": "SpaceX Crew"
+    },
+    {
+      "name": "Cai Xuzhe",
+      "country": "China",
+      "wikipedia": "https://en.wikipedia.org/wiki/Cai_Xuzhe",
+      "station": "Tiangong",
+      "expedition": "Expedition 8",
+      "spaceflight": "Shenzhou"
+    },
+    {
+      "name": "Song Lingdong",
+      "country": "China",
+      "wikipedia": "https://en.wikipedia.org/wiki/Song_Lingdong",
+      "station": "Tiangong",
+      "expedition": "Expedition 8",
+      "spaceflight": "Shenzhou"
+    },
+    {
+      "name": "Wang Haoze",
+      "country": "China",
+      "wikipedia": "https://en.wikipedia.org/wiki/Wang_Haoze",
+      "station": "Tiangong",
+      "expedition": "Expedition 8",
+      "spaceflight": "Shenzhou"
+    }
+  ],
+  "number": 10,
+  "message": "success",
+  "timestamp": "2025-02-05T04:31:35.659Z",
+  "source": "Wikipedia:People currently in space"
+}
