@@ -1,32 +1,43 @@
 name: Update Astronauts Data
 
 on:
-  schedule:
-    - cron: "0 * * * *"  # Runs every hour
-  workflow_dispatch:    # Allows manual trigger
+  push:
+    branches:
+      - main  # Or 'master' if that’s the default branch
 
 jobs:
-  update:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-      - name: Set Up Node.js
-        uses: actions/setup-node@v4
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          node-version: 18
+          node-version: '14'  # You can set this to your preferred Node version
 
-      - name: Install Dependencies
+      # Step 3: Install dependencies (if any)
+      - name: Install dependencies
         run: npm install
 
-      - name: Run Update Script
+      # Step 4: List files in the repo (for debugging, to ensure the path is correct)
+      - name: List files
+        run: |
+          echo "Listing files in the repository"
+          ls -R
+
+      # Step 5: Run the script to update astronaut data
+      - name: Run update-astronauts.js
         run: node update-astronauts.js
 
-      - name: Commit and Push Changes
+      # Step 6: Commit and push the updated astronauts.json back to the repo
+      - name: Commit and push changes
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
           git add astronauts.json
-          git diff --staged --quiet || (git commit -m "🔄 Auto-update astronauts.json" && git push)
+          git commit -m "Updated astronauts data"
+          git push
