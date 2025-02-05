@@ -1,0 +1,13 @@
+{
+  "name": "astronauts-in-space",
+  "version": "1.0.0",
+  "description": "A script to track people currently in space from Wikipedia",
+  "main": "update_astronauts.js",
+  "scripts": {
+    "start": "node update_astronauts.js"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "node-fetch": "^2.6.7"
+  }
+}
