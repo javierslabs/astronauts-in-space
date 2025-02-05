@@ -5,8 +5,11 @@ on:
     - cron: "0 * * * *"  # Runs every hour
   workflow_dispatch:  # 👈 Allows manual triggering from GitHub UI
 
+permissions:  # 👈 Grant permission for actions to push commits
+  contents: write
+
 env:
-  NODE_VERSION: "18.20.6"  # Update this if needed
+  NODE_VERSION: "18.20.6"
 
 jobs:
   update-data:
@@ -15,6 +18,8 @@ jobs:
     steps:
       - name: 📂 Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🛠 Set up Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v3
@@ -26,7 +31,6 @@ jobs:
 
       - name: 🚀 Run update script
         run: node update_astronauts.js
-        working-directory: ${{ github.workspace }}
 
       - name: 📤 Commit and push changes
         run: |
