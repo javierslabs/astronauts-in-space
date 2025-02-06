@@ -1,8 +1,3 @@
-// API constants
-const BASE_URL = 'http://api.open-notify.org/astros.json';
-const CORS_PROXY = 'https://proxy.cors.sh/';
-const API_URL = CORS_PROXY + BASE_URL;
-
 // Function to update the astronaut count display
 function updateAstronautCount(count) {
     const countElement = document.getElementById('astronaut-count');
@@ -24,100 +19,65 @@ function updateAstronautCount(count) {
     }
 }
 
-// Get astronaut data from API
+// Get astronaut data from JSON
 async function getAstronautData() {
     updateAstronautCount('loading');
     
-    const BASE_URL = 'http://api.open-notify.org/astros.json';
-    
-    // List of CORS proxies with their specific URL formats
-    const proxyConfigs = [
-        {
-            name: 'corsproxy.io',
-            url: 'https://corsproxy.io/?',
-            format: (url) => `${proxyConfigs[0].url}${encodeURIComponent(url)}`
-        },
-        {
-            name: 'cors.sh',
-            url: 'https://proxy.cors.sh/',
-            format: (url) => `${proxyConfigs[1].url}${url}`
-        },
-        {
-            name: 'allorigins',
-            url: 'https://api.allorigins.win/raw?url=',
-            format: (url) => `${proxyConfigs[2].url}${encodeURIComponent(url)}`
+    try {
+        const response = await fetch('./astronauts.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-    ];
-    
-    // Try each proxy
-    for (const proxy of proxyConfigs) {
-        try {
-            console.log(`Trying ${proxy.name}...`);
-            const response = await fetch(proxy.format(BASE_URL));
+        
+        const data = await response.json();
+        
+        if (data && Array.isArray(data.people)) {
+            const count = data.people.length;
+            console.log('Successfully loaded astronaut data from JSON');
             
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+            // Remove any existing footnote
+            document.querySelector('.footnote')?.remove();
             
-            const data = await response.json();
+            // Add success footnote with formatted date, time, and timezone
+            const footnote = document.createElement('div');
+            footnote.className = 'footnote';
             
-            if (data && Array.isArray(data.people)) {
-                const count = data.people.length;
-                console.log(`Success with ${proxy.name}`);
-                
-                // Remove any existing footnote
-                document.querySelector('.footnote')?.remove();
-                
-                // Add success footnote
-                const footnote = document.createElement('div');
-                footnote.className = 'footnote';
-                footnote.textContent = 'Data obtained successfully';
-                document.body.appendChild(footnote);
-                
-                updateAstronautCount(count);
-                createAstronautElements(data.people);
-                return;
-            } else {
-                throw new Error('Invalid data format');
-            }
-        } catch (error) {
-            console.log(`Failed with ${proxy.name}:`, error.message);
-            continue;
+            const date = new Date(data.timestamp);
+            const formattedDate = date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            const formattedTime = date.toLocaleTimeString('en-US', {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZoneName: 'shortOffset'
+            });
+            const finalString = `Data from ${formattedDate} at ${formattedTime}`;
+            footnote.textContent = finalString;
+            document.body.appendChild(footnote);
+            
+            updateAstronautCount(count);
+            createAstronautElements(data.people);
+            return;
+        } else {
+            throw new Error('Invalid data format');
         }
+    } catch (error) {
+        console.error('Error loading astronaut data:', error);
+        
+        // Remove any existing footnote
+        document.querySelector('.footnote')?.remove();
+        
+        // Add error footnote
+        const footnote = document.createElement('div');
+        footnote.className = 'footnote';
+        footnote.textContent = 'Error loading astronaut data';
+        document.body.appendChild(footnote);
+        
+        updateAstronautCount(0);
     }
-    
-    // If all proxies fail, use fallback data
-    console.error('All proxies failed. Using fallback data');
-    const fallbackData = {
-        people: [
-            { craft: "ISS", name: "Oleg Kononenko" },
-            { craft: "ISS", name: "Nikolai Chub" },
-            { craft: "ISS", name: "Tracy Caldwell Dyson" },
-            { craft: "ISS", name: "Matthew Dominick" },
-            { craft: "ISS", name: "Michael Barratt" },
-            { craft: "ISS", name: "Jeanette Epps" },
-            { craft: "ISS", name: "Alexander Grebenkin" },
-            { craft: "ISS", name: "Butch Wilmore" },
-            { craft: "ISS", name: "Sunita Williams" },
-            { craft: "Tiangong", name: "Li Guangsu" },
-            { craft: "Tiangong", name: "Li Cong" },
-            { craft: "Tiangong", name: "Ye Guangfu" }
-        ],
-        number: 12,
-        message: "success"
-    };
-    
-    // Remove any existing footnote
-    document.querySelector('.footnote')?.remove();
-    
-    // Add fallback footnote with timestamp
-    const footnote = document.createElement('div');
-    footnote.className = 'footnote';
-    footnote.textContent = 'All proxies failed. Using fallback data from February 3, 2024';
-    document.body.appendChild(footnote);
-    
-    updateAstronautCount(fallbackData.people.length);
-    createAstronautElements(fallbackData.people);
 }
 
 // Initialize the application
@@ -218,7 +178,7 @@ function createAstronautElements(astronauts) {
                 x: 0,
                 y: header.top,
                 width: viewport.width,
-                height: header.height + (currentSize * 1.2) // Reduced from 1.5 to 1.2
+                height: header.height + (currentSize * 0.8) // Changed from 0.5 back to 0.8
             },
             {
                 // Circle zone
@@ -234,9 +194,9 @@ function createAstronautElements(astronauts) {
             const footnoteBounds = footnote.getBoundingClientRect();
             safeZones.push({
                 x: 0,
-                y: footnoteBounds.top - currentSize,
+                y: footnoteBounds.top - (currentSize * 0.7), // Reduced from 1.0
                 width: viewport.width,
-                height: viewport.height - footnoteBounds.top + currentSize
+                height: viewport.height - footnoteBounds.top + (currentSize * 0.7) // Reduced from 1.0
             });
         }
         
@@ -278,7 +238,7 @@ function createAstronautElements(astronauts) {
             while (attempts > 0) {
                 const padding = currentSize;
                 const bannerHeight = 40;
-                const sidePadding = currentSize * 1.5;
+                const sidePadding = currentSize * 2;
                 const topPadding = padding + bannerHeight;
                 
                 const x = sidePadding + (Math.random() * (viewport.width - (sidePadding * 2)));
