@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Create and add subtitle
     const subtitle = document.createElement('div');
     subtitle.className = 'subtitle';
-    subtitle.textContent = 'Click on any astronaut to know their names!';
+    subtitle.textContent = 'Click on any astronaut to know more about them!';
     headerContainer.appendChild(subtitle);
     
     document.body.appendChild(headerContainer);
@@ -283,7 +283,23 @@ function createAstronautElements(astronauts) {
         }
     }
     
-    // Create astronaut elements with final positions
+    // Add this function to get country flag emoji
+    function getFlagEmoji(countryName) {
+        const countryFlags = {
+            'Russia': '🇷🇺',
+            'United States': '🇺🇸',
+            'China': '🇨🇳',
+            'Japan': '🇯🇵',
+            'Germany': '🇩🇪',
+            'France': '🇫🇷',
+            'Italy': '🇮🇹',
+            'Canada': '🇨🇦',
+            'United Kingdom': '🇬🇧'
+        };
+        return countryFlags[countryName] || '🚀';
+    }
+
+    // Modify the astronaut creation part
     placementResult.positions.forEach((position, index) => {
         const astronaut = astronauts[index];
         
@@ -293,7 +309,44 @@ function createAstronautElements(astronauts) {
         wrapper.style.left = `${position.x}px`;
         wrapper.style.top = `${position.y}px`;
         
-        // Rest of the astronaut creation code remains the same
+        // Create info card
+        const infoCard = document.createElement('div');
+        infoCard.className = 'astronaut-info-card';
+        
+        // Add a data attribute to link the card with its astronaut
+        const cardId = `astronaut-card-${index}`;
+        infoCard.dataset.cardId = cardId;
+        wrapper.dataset.cardId = cardId;
+        
+        // Always position above astronaut
+        infoCard.classList.add('point-down');
+        
+        // Create card content
+        infoCard.innerHTML = `
+            <div class="info-content">
+                <a href="${astronaut.wikipedia}" target="_blank" class="astronaut-name">
+                    ${astronaut.name}
+                </a>
+                <div class="info-row">
+                    <span class="flag">${getFlagEmoji(astronaut.country)}</span>
+                    <span class="country">${astronaut.country}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Station:</span>
+                    <span>${astronaut.station}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Mission:</span>
+                    <span>${astronaut.expedition}</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Spacecraft:</span>
+                    <span>${astronaut.spaceflight}</span>
+                </div>
+            </div>
+        `;
+
+        // Add the float animation parameters to the card
         const floatParams = createUniqueFloatParameters();
         wrapper.style.setProperty('--move-x1', `${floatParams.x1}px`);
         wrapper.style.setProperty('--move-y1', `${floatParams.y1}px`);
@@ -303,6 +356,16 @@ function createAstronautElements(astronauts) {
         wrapper.style.setProperty('--move-y3', `${floatParams.y3}px`);
         wrapper.style.setProperty('--float-duration', `${floatParams.duration}s`);
         wrapper.style.setProperty('--float-delay', `${floatParams.delay}s`);
+        
+        // Copy the same animation parameters to the card
+        infoCard.style.setProperty('--move-x1', `${floatParams.x1}px`);
+        infoCard.style.setProperty('--move-y1', `${floatParams.y1}px`);
+        infoCard.style.setProperty('--move-x2', `${floatParams.x2}px`);
+        infoCard.style.setProperty('--move-y2', `${floatParams.y2}px`);
+        infoCard.style.setProperty('--move-x3', `${floatParams.x3}px`);
+        infoCard.style.setProperty('--move-y3', `${floatParams.y3}px`);
+        infoCard.style.setProperty('--float-duration', `${floatParams.duration}s`);
+        infoCard.style.setProperty('--float-delay', `${floatParams.delay}s`);
         
         const astronautDiv = document.createElement('div');
         astronautDiv.className = 'astronaut';
@@ -323,31 +386,101 @@ function createAstronautElements(astronauts) {
         
         wrapper.addEventListener('click', (e) => {
             e.stopPropagation();
-            document.querySelectorAll('.astronaut-banner').forEach(b => b.remove());
-            const banner = document.createElement('div');
-            banner.className = 'astronaut-banner';
-            banner.textContent = astronaut.name || 'Name unavailable';
-            wrapper.appendChild(banner);
+            
+            // Remove any existing open cards
+            document.querySelectorAll('.astronaut-info-card').forEach(card => {
+                card.classList.remove('visible');
+                card.style.opacity = '0';
+                card.style.visibility = 'hidden';
+            });
+            
+            // Get the astronaut's position and viewport dimensions
+            const rect = wrapper.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+            const cardWidth = 220; // Width of the info card
+            const margin = 20; // Margin from viewport edge
+            
+            // Calculate initial position (left of astronaut)
+            let leftPosition = rect.left - 90;
+            let pointDownOffset = 0; // For the pointer position
+            
+            // Check if card would be outside viewport on the left
+            if (leftPosition < margin) {
+                // Move card to the right
+                leftPosition = margin;
+                pointDownOffset = rect.left + (rect.width / 2) - (margin + 110); // Center of astronaut minus center of card
+            }
+            // Check if card would be outside viewport on the right
+            else if (leftPosition + cardWidth > viewportWidth - margin) {
+                // Move card to the left
+                leftPosition = viewportWidth - cardWidth - margin;
+                pointDownOffset = rect.left + (rect.width / 2) - (leftPosition + 110); // Center of astronaut minus center of card
+            }
+            
+            // Position the card
+            infoCard.style.left = `${leftPosition}px`;
+            infoCard.style.top = `${rect.top - 175}px`;
+            
+            // Update pointer position if needed
+            if (pointDownOffset !== 0) {
+                infoCard.style.setProperty('--pointer-offset', `${pointDownOffset}px`);
+            } else {
+                infoCard.style.removeProperty('--pointer-offset');
+            }
+            
+            // Show the card
+            infoCard.classList.add('visible');
+            infoCard.style.opacity = '1';
+            infoCard.style.visibility = 'visible';
+        });
+        
+        // Add close button to the card
+        const closeButton = document.createElement('button');
+        closeButton.className = 'close-button';
+        closeButton.innerHTML = '×';
+        closeButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            infoCard.classList.remove('visible');
+            infoCard.style.opacity = '0';
+            infoCard.style.visibility = 'hidden';
+        });
+
+        // Add close button to the card content
+        infoCard.querySelector('.info-content').insertAdjacentElement('afterbegin', closeButton);
+        
+        // Add click handler to the info card to prevent closing when clicking inside it
+        infoCard.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent the body click handler from firing
         });
         
         astronautDiv.appendChild(astronautImg);
         wrapper.appendChild(astronautDiv);
         container.appendChild(wrapper);
+        document.body.appendChild(infoCard); // Append card to body instead
     });
 }
 
-// Update resize handler to reposition banners
+// Update resize handler to reposition banners and close info cards
 window.addEventListener('resize', debounce(() => {
+    // Close all info cards
+    document.querySelectorAll('.astronaut-info-card').forEach(card => {
+        card.classList.remove('visible');
+        card.style.opacity = '0';
+        card.style.visibility = 'hidden';
+    });
+    
+    // Reposition astronauts if needed
     if (currentAstronauts.length > 0) {
-        // Remove existing banners
         document.querySelectorAll('.astronaut-banner').forEach(b => b.remove());
         createAstronautElements(currentAstronauts);
     }
 }, 250));
 
-// Add click handler to close all banners when clicking anywhere
-document.body.addEventListener('click', (e) => {
-    if (!e.target.closest('.astronaut')) {
-        document.querySelectorAll('.astronaut-banner').forEach(b => b.remove());
-    }
+// Update the body click handler at the bottom of the file
+document.body.addEventListener('click', () => {
+    document.querySelectorAll('.astronaut-info-card').forEach(card => {
+        card.classList.remove('visible');
+        card.style.opacity = '0';
+        card.style.visibility = 'hidden';
+    });
 }); 
