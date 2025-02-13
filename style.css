@@ -138,15 +138,18 @@ h2 {
         max-width: 95%;
         border-radius: 4px;
         padding: 0 8px;
+        padding-bottom: 2px; /* Reduced from 4px */
+        top: 10px;
     }
 
     h1 {
-        font-size: clamp(8px, calc(var(--base-size) * 0.22), 24px);
-        padding: 12px 8px;
-        height: 52px;
-        line-height: 28px;
+        font-size: clamp(12px, 5vw, 20px); /* Increased font size */
+        padding: 6px 4px; /* Reduced padding */
+        height: auto;
+        line-height: 1.2;
         white-space: nowrap;
         letter-spacing: 1px;
+        margin-bottom: -2px; /* Pull subtitle closer */
     }
 
     .astronaut-container {
@@ -160,9 +163,26 @@ h2 {
     }
 
     .subtitle {
-        font-size: calc(var(--base-size) * 0.08);
-        padding: 4px;
-        margin-top: 2px;
+        font-size: clamp(8px, 3vw, 14px); /* Increased font size */
+        padding: 0px; /* Removed padding */
+        margin-top: 0;
+        line-height: 1.2;
+    }
+}
+
+/* Even smaller screens */
+@media (max-width: 380px) {
+    .header-container {
+        min-width: 90vw;
+    }
+
+    h1 {
+        font-size: 16px; /* Increased from 12px */
+        letter-spacing: 0.5px;
+    }
+
+    .subtitle {
+        font-size: 10px; /* Increased from 8px */
     }
 }
 
@@ -352,4 +372,26 @@ html, body {
 
 .flag {
     font-size: 1.2em;
+}
+
+/* Point-up variant */
+.point-up::before {
+    position: fixed;
+    z-index: 9998;
+    content: '';
+    width: 12px;
+    height: 12px;
+    background: rgb(0, 0, 0);
+    transform: translateX(calc(var(--pointer-offset, 0px))) rotate(45deg);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-bottom: none;
+    border-right: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    top: -6px;
+    left: 50%;
+}
+
+.astronaut-info-card.visible.point-up::before {
+    opacity: 1;
 }

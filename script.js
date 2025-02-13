@@ -397,29 +397,48 @@ function createAstronautElements(astronauts) {
             // Get the astronaut's position and viewport dimensions
             const rect = wrapper.getBoundingClientRect();
             const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
             const cardWidth = 220; // Width of the info card
-            const margin = 20; // Margin from viewport edge
+            const cardHeight = 180; // Approximate height of the info card
+            const margin = 10; // Margin from viewport edge
+            const topThreshold = cardHeight + margin; // Minimum space needed above
             
             // Calculate initial position (left of astronaut)
             let leftPosition = rect.left - 90;
             let pointDownOffset = 0; // For the pointer position
             
+            // Calculate the center of the astronaut
+            const astronautCenter = rect.left + (rect.width / 2);
+            
             // Check if card would be outside viewport on the left
             if (leftPosition < margin) {
-                // Move card to the right
                 leftPosition = margin;
-                pointDownOffset = rect.left + (rect.width / 2) - (margin + 110); // Center of astronaut minus center of card
+                pointDownOffset = astronautCenter - (leftPosition + (cardWidth / 2));
             }
             // Check if card would be outside viewport on the right
             else if (leftPosition + cardWidth > viewportWidth - margin) {
-                // Move card to the left
                 leftPosition = viewportWidth - cardWidth - margin;
-                pointDownOffset = rect.left + (rect.width / 2) - (leftPosition + 110); // Center of astronaut minus center of card
+                pointDownOffset = astronautCenter - (leftPosition + (cardWidth / 2));
             }
+            else {
+                // When card is in normal position, calculate offset to astronaut center
+                pointDownOffset = astronautCenter - (leftPosition + (cardWidth / 2));
+            }
+            
+            // Check if we should show the card below the astronaut
+            const showBelow = rect.top < topThreshold;
             
             // Position the card
             infoCard.style.left = `${leftPosition}px`;
-            infoCard.style.top = `${rect.top - 175}px`;
+            if (showBelow) {
+                infoCard.style.top = `${rect.bottom + 50}px`; // 20px below astronaut
+                infoCard.classList.remove('point-down');
+                infoCard.classList.add('point-up');
+            } else {
+                infoCard.style.top = `${rect.top - 175}px`;
+                infoCard.classList.remove('point-up');
+                infoCard.classList.add('point-down');
+            }
             
             // Update pointer position if needed
             if (pointDownOffset !== 0) {
