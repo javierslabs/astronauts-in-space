@@ -395,3 +395,167 @@ html, body {
 .astronaut-info-card.visible.point-up::before {
     opacity: 1;
 }
+
+/* Modal background */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 9000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-backdrop.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Astronaut list modal */
+.astronaut-list {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgb(0, 0, 0);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    padding: 24px 20px 20px;
+    width: min(90vw, 400px);
+    max-height: min(80vh, 600px);
+    overflow-y: auto;
+    z-index: 9001;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.astronaut-list.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* List items */
+.list-item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px 0;
+    cursor: pointer;
+}
+
+.list-item:last-child {
+    border-bottom: none;
+}
+
+.list-item-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1em;
+    position: relative;
+    padding-right: 24px; /* Space for the arrow */
+}
+
+.list-item-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    margin-top: 0;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
+}
+
+.list-item.expanded .list-item-content {
+    max-height: 200px;
+    margin-top: 12px;
+    opacity: 1;
+}
+
+.list-item-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-left: 28px;
+    font-size: 0.9em;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Make the counter clickable */
+#astronaut-count {
+    cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+#astronaut-count:hover {
+    transform: scale(1.05);
+}
+
+/* Add styles for the list close button */
+.list-close-button {
+    position: absolute;
+    top: 24px;
+    right: 20px;
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: none;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.list-close-button:hover {
+    color: white;
+}
+
+/* Arrow indicator */
+.list-item-header::after {
+    content: '›';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%) rotate(0deg);
+    transition: transform 0.3s ease;
+    font-size: 1.4em;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.list-item.expanded .list-item-header::after {
+    transform: translateY(-50%) rotate(90deg);
+}
+
+/* Style for the name when expanded */
+.list-item.expanded .astronaut-name {
+    color: white;
+}
+
+/* Hover effect for list items */
+.list-item-header:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+/* List title */
+.list-title {
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 16px;
+    padding: 0;
+    height: auto;
+    color: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 12px;
+}

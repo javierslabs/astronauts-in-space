@@ -97,7 +97,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Create and add subtitle
     const subtitle = document.createElement('div');
     subtitle.className = 'subtitle';
-    subtitle.textContent = 'Click on any astronaut to know more about them!';
+    subtitle.innerHTML = `
+        Click on any astronaut to know more about them!<br>
+        Click on the number to see the list
+    `;
     headerContainer.appendChild(subtitle);
     
     document.body.appendChild(headerContainer);
@@ -146,6 +149,22 @@ function createUniqueFloatParameters() {
         duration: 3 + Math.random() * 4, // Random duration between 3-7s
         delay: Math.random() * -5 // Random start delay
     };
+}
+
+// Move getFlagEmoji function outside of createAstronautElements
+function getFlagEmoji(countryName) {
+    const countryFlags = {
+        'Russia': '🇷🇺',
+        'United States': '🇺🇸',
+        'China': '🇨🇳',
+        'Japan': '🇯🇵',
+        'Germany': '🇩🇪',
+        'France': '🇫🇷',
+        'Italy': '🇮🇹',
+        'Canada': '🇨🇦',
+        'United Kingdom': '🇬🇧'
+    };
+    return countryFlags[countryName] || '🚀';
 }
 
 function createAstronautElements(astronauts) {
@@ -283,22 +302,6 @@ function createAstronautElements(astronauts) {
         }
     }
     
-    // Add this function to get country flag emoji
-    function getFlagEmoji(countryName) {
-        const countryFlags = {
-            'Russia': '🇷🇺',
-            'United States': '🇺🇸',
-            'China': '🇨🇳',
-            'Japan': '🇯🇵',
-            'Germany': '🇩🇪',
-            'France': '🇫🇷',
-            'Italy': '🇮🇹',
-            'Canada': '🇨🇦',
-            'United Kingdom': '🇬🇧'
-        };
-        return countryFlags[countryName] || '🚀';
-    }
-
     // Modify the astronaut creation part
     placementResult.positions.forEach((position, index) => {
         const astronaut = astronauts[index];
@@ -398,30 +401,26 @@ function createAstronautElements(astronauts) {
             const rect = wrapper.getBoundingClientRect();
             const viewportWidth = window.innerWidth;
             const viewportHeight = window.innerHeight;
-            const cardWidth = 220; // Width of the info card
-            const cardHeight = 180; // Approximate height of the info card
-            const margin = 10; // Margin from viewport edge
-            const topThreshold = cardHeight + margin; // Minimum space needed above
+            const cardWidth = 220;
+            const cardHeight = 180;
+            const margin = 10;
+            const topThreshold = cardHeight + margin;
             
-            // Calculate initial position (left of astronaut)
-            let leftPosition = rect.left - 90;
-            let pointDownOffset = 0; // For the pointer position
-            
-            // Calculate the center of the astronaut
+            // Calculate the center position of the astronaut
             const astronautCenter = rect.left + (rect.width / 2);
             
-            // Check if card would be outside viewport on the left
+            // Initially position card centered on astronaut
+            let leftPosition = astronautCenter - (cardWidth / 2);
+            let pointDownOffset = 0;
+            
+            // Adjust if card would be outside viewport on the left
             if (leftPosition < margin) {
+                pointDownOffset = astronautCenter - (margin + (cardWidth / 2));
                 leftPosition = margin;
-                pointDownOffset = astronautCenter - (leftPosition + (cardWidth / 2));
             }
-            // Check if card would be outside viewport on the right
+            // Adjust if card would be outside viewport on the right
             else if (leftPosition + cardWidth > viewportWidth - margin) {
                 leftPosition = viewportWidth - cardWidth - margin;
-                pointDownOffset = astronautCenter - (leftPosition + (cardWidth / 2));
-            }
-            else {
-                // When card is in normal position, calculate offset to astronaut center
                 pointDownOffset = astronautCenter - (leftPosition + (cardWidth / 2));
             }
             
@@ -431,11 +430,11 @@ function createAstronautElements(astronauts) {
             // Position the card
             infoCard.style.left = `${leftPosition}px`;
             if (showBelow) {
-                infoCard.style.top = `${rect.bottom + 50}px`; // 20px below astronaut
+                infoCard.style.top = `${rect.bottom + 50}px`; // Reduced from 50px to 30px
                 infoCard.classList.remove('point-down');
                 infoCard.classList.add('point-up');
             } else {
-                infoCard.style.top = `${rect.top - 175}px`;
+                infoCard.style.top = `${rect.top - (cardHeight + 1)}px`; // Reduced from 50px to 30px
                 infoCard.classList.remove('point-up');
                 infoCard.classList.add('point-down');
             }
@@ -502,4 +501,86 @@ document.body.addEventListener('click', () => {
         card.style.opacity = '0';
         card.style.visibility = 'hidden';
     });
+});
+
+// Create modal elements
+const modalBackdrop = document.createElement('div');
+modalBackdrop.className = 'modal-backdrop';
+
+const astronautList = document.createElement('div');
+astronautList.className = 'astronaut-list';
+
+document.body.appendChild(modalBackdrop);
+document.body.appendChild(astronautList);
+
+// Add click handler to astronaut count
+document.getElementById('astronaut-count').addEventListener('click', () => {
+    // Sort astronauts by name
+    const sortedAstronauts = [...currentAstronauts].sort((a, b) => 
+        a.name.localeCompare(b.name)
+    );
+    
+    // Create list HTML
+    astronautList.innerHTML = `
+        <h1 class="list-title">ASTRONAUTS IN SPACE</h1>
+        <button class="list-close-button">×</button>
+        ${sortedAstronauts.map(astronaut => `
+            <div class="list-item">
+                <div class="list-item-header">
+                    <span class="flag">${getFlagEmoji(astronaut.country)}</span>
+                    <a href="${astronaut.wikipedia}" 
+                       target="_blank" 
+                       class="astronaut-name"
+                       onclick="event.stopPropagation()">
+                        ${astronaut.name}
+                    </a>
+                </div>
+                <div class="list-item-content">
+                    <div class="list-item-details">
+                        <div>Station: ${astronaut.station}</div>
+                        <div>Mission: ${astronaut.expedition}</div>
+                        <div>Spacecraft: ${astronaut.spaceflight}</div>
+                    </div>
+                </div>
+            </div>
+        `).join('')}
+    `;
+    
+    // Add click handler for the close button
+    const listCloseButton = astronautList.querySelector('.list-close-button');
+    listCloseButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        modalBackdrop.classList.remove('visible');
+        astronautList.classList.remove('visible');
+    });
+
+    // Add click handlers for list items
+    const listItems = astronautList.querySelectorAll('.list-item');
+    listItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+            // Collapse all other items
+            listItems.forEach(otherItem => {
+                if (otherItem !== item) {
+                    otherItem.classList.remove('expanded');
+                }
+            });
+            // Toggle clicked item
+            item.classList.toggle('expanded');
+        });
+    });
+    
+    // Show modal and list
+    modalBackdrop.classList.add('visible');
+    astronautList.classList.add('visible');
+});
+
+// Close modal when clicking outside
+modalBackdrop.addEventListener('click', () => {
+    modalBackdrop.classList.remove('visible');
+    astronautList.classList.remove('visible');
+});
+
+// Prevent clicks inside list from closing modal
+astronautList.addEventListener('click', (e) => {
+    e.stopPropagation();
 }); 
