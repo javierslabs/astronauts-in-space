@@ -98,8 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const subtitle = document.createElement('div');
     subtitle.className = 'subtitle';
     subtitle.innerHTML = `
-        Click on any astronaut to know more about them!<br>
-        Click on the number to see the list
+        Click an astronaut to learn more!<br>
+        Click the number to view the full list
     `;
     headerContainer.appendChild(subtitle);
     
@@ -524,9 +524,10 @@ document.getElementById('astronaut-count').addEventListener('click', () => {
     astronautList.innerHTML = `
         <h1 class="list-title">ASTRONAUTS IN SPACE</h1>
         <button class="list-close-button">×</button>
-        ${sortedAstronauts.map(astronaut => `
+        ${sortedAstronauts.map((astronaut, index) => `
             <div class="list-item">
                 <div class="list-item-header">
+                    <span class="astronaut-number">${index + 1}.</span>
                     <span class="flag">${getFlagEmoji(astronaut.country)}</span>
                     <a href="${astronaut.wikipedia}" 
                        target="_blank" 
@@ -583,4 +584,60 @@ modalBackdrop.addEventListener('click', () => {
 // Prevent clicks inside list from closing modal
 astronautList.addEventListener('click', (e) => {
     e.stopPropagation();
+});
+
+// Add credits section after the footnote
+const creditsButton = document.createElement('div');
+creditsButton.className = 'credits-button';
+creditsButton.textContent = 'Credits and more';
+
+const creditsBackdrop = document.createElement('div');
+creditsBackdrop.className = 'credits-backdrop';
+
+const creditsPanel = document.createElement('div');
+creditsPanel.className = 'credits-panel';
+creditsPanel.innerHTML = `
+    <div class="credits-content">
+        <h3>Sources</h3>
+        <div class="sources-group">
+            <a href="https://en.wikipedia.org/wiki/Template:People_currently_in_space" 
+               target="_blank">Wikipedia</a>
+            <span class="separator">•</span>
+            <a href="https://www.svgrepo.com" 
+               target="_blank">SVG Repo</a>
+        </div>
+        
+        <h3>Connect</h3>
+        <div class="links-group">
+            <a href="https://x.com/callme528437" 
+               target="_blank">Twitter/X</a>
+        </div>
+
+        <h3>Support</h3>
+        <div class="sources-group">
+            <a href="https://venmo.com/u/JavierMBustamante" 
+               target="_blank">Venmo</a>
+            <span class="separator">•</span>
+            <a href="https://revolut.me/javiereyi" 
+               target="_blank">Revolut</a>
+        </div>
+    </div>
+`;
+
+document.body.appendChild(creditsButton);
+document.body.appendChild(creditsBackdrop);
+document.body.appendChild(creditsPanel);
+
+// Add click handler
+creditsButton.addEventListener('click', () => {
+    creditsPanel.classList.toggle('visible');
+    creditsBackdrop.classList.toggle('visible');
+    creditsButton.classList.toggle('active');
+});
+
+// Close credits when clicking backdrop
+creditsBackdrop.addEventListener('click', () => {
+    creditsPanel.classList.remove('visible');
+    creditsBackdrop.classList.remove('visible');
+    creditsButton.classList.remove('active');
 }); 

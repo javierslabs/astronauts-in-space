@@ -232,7 +232,7 @@ h2 {
     position: fixed;
     z-index: 800;
     transform: translateX(-50%);
-    bottom: 1rem;
+    bottom: 2.5rem;
     left: 50%;
     font-size: calc(var(--header-font) * 0.5);
     font-weight: 300;
@@ -245,9 +245,7 @@ h2 {
 
 @media (max-width: 768px) {
     .footnote {
-        font-size: calc(var(--base-size) * 0.06);
-        padding: min(1vh, 0.2rem);
-        bottom: 0.5rem;
+        bottom: 2rem;
     }
 }
 
@@ -457,7 +455,8 @@ html, body {
     gap: 8px;
     font-size: 1.1em;
     position: relative;
-    padding-right: 24px; /* Space for the arrow */
+    padding-right: 24px;
+    padding-left: 4px; /* Add some padding for the number */
 }
 
 .list-item-content {
@@ -558,4 +557,133 @@ html, body {
     color: rgba(255, 255, 255, 0.9);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding-bottom: 12px;
+}
+
+.astronaut-number {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9em;
+    min-width: 24px;
+}
+
+/* Credits button */
+.credits-button {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    z-index: 9999; /* Increased z-index */
+    transition: all 0.3s ease;
+}
+
+.credits-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 9998;
+}
+
+.credits-backdrop.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Credits panel */
+.credits-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgb(0, 0, 0);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    z-index: 9999; /* Increased z-index */
+}
+
+.credits-panel.visible {
+    transform: translateY(0);
+}
+
+/* Credits content */
+.credits-content {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 24px 20px;
+    text-align: center;
+}
+
+.credits-content h3 {
+    font-size: 12px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 20px 0 12px;
+}
+
+.credits-content h3:first-child {
+    margin-top: 0;
+}
+
+.sources-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.separator {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 12px;
+}
+
+.links-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.credits-content a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    padding: 6px 12px;
+    border-radius: 4px;
+}
+
+.credits-content a:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+@media (max-width: 768px) {
+    .credits-content {
+        padding: 20px 16px;
+    }
+    
+    .credits-content h3 {
+        font-size: 11px;
+        margin: 16px 0 8px;
+    }
+    
+    .credits-content a {
+        font-size: 13px;
+    }
 }
