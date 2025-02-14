@@ -113,6 +113,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Start getting astronaut data
     getAstronautData();
+    
+    // Add initial orientation check
+    toggleCircleVisibility();
 });
 
 // Add debounced resize handler
@@ -478,8 +481,36 @@ function createAstronautElements(astronauts) {
     });
 }
 
+// Function to check if device is mobile
+function isMobileDevice() {
+    return window.innerWidth <= 768;
+}
+
+// Function to check if device is in landscape mode
+function isLandscape() {
+    // Check both screen orientation API and window dimensions
+    return (screen.orientation && screen.orientation.type.includes('landscape')) || 
+           window.innerWidth > window.innerHeight;
+}
+
+// Function to toggle circle visibility based on orientation
+function toggleCircleVisibility() {
+    const circle = document.querySelector('.astronaut-counter');
+    if (!circle || !isMobileDevice()) return; // Only proceed if it's a mobile device
+
+    if (!isLandscape()) {
+        circle.style.opacity = '0';
+        circle.style.visibility = 'hidden';
+    } else {
+        circle.style.opacity = '1';
+        circle.style.visibility = 'visible';
+    }
+}
+
 // Update resize handler to reposition banners and close info cards
 window.addEventListener('resize', debounce(() => {
+    toggleCircleVisibility();
+    
     // Close all info cards
     document.querySelectorAll('.astronaut-info-card').forEach(card => {
         card.classList.remove('visible');
@@ -493,6 +524,13 @@ window.addEventListener('resize', debounce(() => {
         createAstronautElements(currentAstronauts);
     }
 }, 250));
+
+// Listen for orientation changes
+if (screen.orientation) {
+    screen.orientation.addEventListener('change', () => {
+        toggleCircleVisibility();
+    });
+}
 
 // Update the body click handler at the bottom of the file
 document.body.addEventListener('click', () => {
