@@ -114,8 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Start getting astronaut data
     getAstronautData();
     
-    // Add initial orientation check
-    toggleCircleVisibility();
+    // Add initial visibility check
+    toggleContentVisibility();
 });
 
 // Add debounced resize handler
@@ -481,35 +481,40 @@ function createAstronautElements(astronauts) {
     });
 }
 
-// Function to check if device is mobile
-function isMobileDevice() {
-    return window.innerWidth <= 768;
+// Function to check if device is mobile and in landscape
+function isMobileLandscape() {
+    return window.innerWidth <= 768 && window.innerWidth > window.innerHeight;
 }
 
-// Function to check if device is in landscape mode
-function isLandscape() {
-    // Check both screen orientation API and window dimensions
-    return (screen.orientation && screen.orientation.type.includes('landscape')) || 
-           window.innerWidth > window.innerHeight;
-}
-
-// Function to toggle circle visibility based on orientation
-function toggleCircleVisibility() {
+// Function to toggle content visibility based on orientation
+function toggleContentVisibility() {
     const circle = document.querySelector('.astronaut-counter');
-    if (!circle || !isMobileDevice()) return; // Only proceed if it's a mobile device
+    const otherElements = document.querySelectorAll('.header-container, .astronaut-container, .footnote, .credits-button');
+    
+    if (!circle) return;
 
-    if (!isLandscape()) {
-        circle.style.opacity = '0';
-        circle.style.visibility = 'hidden';
+    if (isMobileLandscape()) {
+        // Hide everything except the circle in mobile landscape
+        otherElements.forEach(el => {
+            el.style.opacity = '0';
+            el.style.visibility = 'hidden';
+        });
+        circle.style.opacity = '1';
+        circle.style.visibility = 'visible';
     } else {
+        // Show everything in all other cases
+        otherElements.forEach(el => {
+            el.style.opacity = '1';
+            el.style.visibility = 'visible';
+        });
         circle.style.opacity = '1';
         circle.style.visibility = 'visible';
     }
 }
 
-// Update resize handler to reposition banners and close info cards
+// Add orientation change and resize listeners
 window.addEventListener('resize', debounce(() => {
-    toggleCircleVisibility();
+    toggleContentVisibility();
     
     // Close all info cards
     document.querySelectorAll('.astronaut-info-card').forEach(card => {
@@ -528,7 +533,7 @@ window.addEventListener('resize', debounce(() => {
 // Listen for orientation changes
 if (screen.orientation) {
     screen.orientation.addEventListener('change', () => {
-        toggleCircleVisibility();
+        toggleContentVisibility();
     });
 }
 
