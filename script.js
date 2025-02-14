@@ -113,9 +113,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Start getting astronaut data
     getAstronautData();
-    
-    // Add initial visibility check
-    toggleContentVisibility();
 });
 
 // Add debounced resize handler
@@ -481,41 +478,8 @@ function createAstronautElements(astronauts) {
     });
 }
 
-// Function to check if device is mobile and in landscape
-function isMobileLandscape() {
-    return window.innerWidth <= 768 && window.innerWidth > window.innerHeight;
-}
-
-// Function to toggle content visibility based on orientation
-function toggleContentVisibility() {
-    const circle = document.querySelector('.astronaut-counter');
-    const otherElements = document.querySelectorAll('.header-container, .astronaut-container, .footnote, .credits-button');
-    
-    if (!circle) return;
-
-    if (isMobileLandscape()) {
-        // Hide everything except the circle in mobile landscape
-        otherElements.forEach(el => {
-            el.style.opacity = '0';
-            el.style.visibility = 'hidden';
-        });
-        circle.style.opacity = '1';
-        circle.style.visibility = 'visible';
-    } else {
-        // Show everything in all other cases
-        otherElements.forEach(el => {
-            el.style.opacity = '1';
-            el.style.visibility = 'visible';
-        });
-        circle.style.opacity = '1';
-        circle.style.visibility = 'visible';
-    }
-}
-
-// Add orientation change and resize listeners
+// Update resize handler to reposition banners and close info cards
 window.addEventListener('resize', debounce(() => {
-    toggleContentVisibility();
-    
     // Close all info cards
     document.querySelectorAll('.astronaut-info-card').forEach(card => {
         card.classList.remove('visible');
@@ -529,13 +493,6 @@ window.addEventListener('resize', debounce(() => {
         createAstronautElements(currentAstronauts);
     }
 }, 250));
-
-// Listen for orientation changes
-if (screen.orientation) {
-    screen.orientation.addEventListener('change', () => {
-        toggleContentVisibility();
-    });
-}
 
 // Update the body click handler at the bottom of the file
 document.body.addEventListener('click', () => {
