@@ -98,8 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const subtitle = document.createElement('div');
     subtitle.className = 'subtitle';
     subtitle.innerHTML = `
-        Click an astronaut to learn more!<br>
-        Click the number to view the full list
+        Click on an astronaut to learn more!<br>
+        Click on the number to view the full list
     `;
     headerContainer.appendChild(subtitle);
     
