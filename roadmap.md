@@ -84,7 +84,7 @@ The astronaut images appear and bounce around.
    ```bash
    git push
    ```
-
+   git push origin main --force
 ### Best Practices
 1. **Make Focused Commits**
    - Each commit should represent one logical change

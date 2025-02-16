@@ -4,23 +4,24 @@ A minimalist web visualization showing the current number of astronauts in space
 
 ## Features
 
-- Real-time data from the Open Notify API
-- Minimalist black and white design
-- Centered circular display showing current astronaut count
-- Dynamic astronaut visualizations:
-  - Random positioning avoiding overlap
-  - Direction-based floating animation
-  - Alternating orientations (half facing each direction)
-  - Varied scales for depth effect
+- Real-time data from Wikipedia
+- Minimalist design
+- Centered display showing current astronaut count
+- Dynamic astronaut visualizations
 - Responsive design that works on all screen sizes
-- Fallback system for API unavailability
 
 ## Technologies Used
 
 - HTML5
 - CSS3
-- Vanilla JavaScript
-- [Open Notify API](http://api.open-notify.org/astros.json)
+- JavaScript
+- Wikipedia API
 - Google Fonts (Inter)
+- SVG icons
 
-## Project Structure 
+## SEO Optimization
+
+The site includes:
+- Meta description for search engines
+- Relevant keywords for space-related searches
+- Open Graph tags for social media sharing 
