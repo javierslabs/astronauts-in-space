@@ -57,6 +57,38 @@
       "spaceflight": "SpaceX Crew"
     },
     {
+      "name": "Anne McClain",
+      "country": "United States",
+      "wikipedia": "https://en.wikipedia.org/wiki/Anne_McClain",
+      "station": "International",
+      "expedition": "Expedition 72",
+      "spaceflight": "SpaceX Crew"
+    },
+    {
+      "name": "Nichole Ayers",
+      "country": "United States",
+      "wikipedia": "https://en.wikipedia.org/wiki/Nichole_Ayers",
+      "station": "International",
+      "expedition": "Expedition 72",
+      "spaceflight": "SpaceX Crew"
+    },
+    {
+      "name": "Takuya Onishi",
+      "country": "Japan",
+      "wikipedia": "https://en.wikipedia.org/wiki/Takuya_Onishi",
+      "station": "International",
+      "expedition": "Expedition 72",
+      "spaceflight": "SpaceX Crew"
+    },
+    {
+      "name": "Kirill Peskov",
+      "country": "Russia",
+      "wikipedia": "https://en.wikipedia.org/wiki/Kirill_Peskov",
+      "station": "International",
+      "expedition": "Expedition 72",
+      "spaceflight": "SpaceX Crew"
+    },
+    {
       "name": "Cai Xuzhe",
       "country": "China",
       "wikipedia": "https://en.wikipedia.org/wiki/Cai_Xuzhe",
@@ -81,8 +113,8 @@
       "spaceflight": "Shenzhou"
     }
   ],
-  "number": 10,
+  "number": 14,
   "message": "success",
-  "timestamp": "2025-03-16T16:21:26.820Z",
+  "timestamp": "2025-03-16T17:15:45.126Z",
   "source": "Wikipedia:People currently in space"
 }
