@@ -41,22 +41,6 @@
       "spaceflight": "SpaceX Crew"
     },
     {
-      "name": "Barry E. Wilmore",
-      "country": "United States",
-      "wikipedia": "https://en.wikipedia.org/wiki/Barry_Wilmore",
-      "station": "International",
-      "expedition": "Expedition 72",
-      "spaceflight": "SpaceX Crew"
-    },
-    {
-      "name": "Sunita Williams",
-      "country": "United States",
-      "wikipedia": "https://en.wikipedia.org/wiki/Sunita_Williams",
-      "station": "International",
-      "expedition": "Expedition 72",
-      "spaceflight": "SpaceX Crew"
-    },
-    {
       "name": "Anne McClain",
       "country": "United States",
       "wikipedia": "https://en.wikipedia.org/wiki/Anne_McClain",
@@ -113,8 +97,8 @@
       "spaceflight": "Shenzhou"
     }
   ],
-  "number": 14,
+  "number": 12,
   "message": "success",
-  "timestamp": "2025-03-18T23:17:49.385Z",
+  "timestamp": "2025-03-19T01:36:11.221Z",
   "source": "Wikipedia:People currently in space"
 }
