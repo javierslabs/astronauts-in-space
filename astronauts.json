@@ -25,22 +25,6 @@
       "spaceflight": "Soyuz MS"
     },
     {
-      "name": "Nick Hague",
-      "country": "United States",
-      "wikipedia": "https://en.wikipedia.org/wiki/Nick_Hague",
-      "station": "International",
-      "expedition": "Expedition 72",
-      "spaceflight": "SpaceX Crew"
-    },
-    {
-      "name": "Aleksandr Gorbunov",
-      "country": "Russia",
-      "wikipedia": "https://en.wikipedia.org/wiki/Aleksandr_Gorbunov",
-      "station": "International",
-      "expedition": "Expedition 72",
-      "spaceflight": "SpaceX Crew"
-    },
-    {
       "name": "Anne McClain",
       "country": "United States",
       "wikipedia": "https://en.wikipedia.org/wiki/Anne_McClain",
@@ -97,8 +81,8 @@
       "spaceflight": "Shenzhou"
     }
   ],
-  "number": 12,
+  "number": 10,
   "message": "success",
-  "timestamp": "2025-03-19T08:26:22.507Z",
+  "timestamp": "2025-03-19T09:21:22.598Z",
   "source": "Wikipedia:People currently in space"
 }
