@@ -57,6 +57,30 @@
       "spaceflight": "SpaceX Crew"
     },
     {
+      "name": "Sergey Ryzhikov",
+      "country": "Russia",
+      "wikipedia": "https://en.wikipedia.org/wiki/Sergey_Ryzhikov_(cosmonaut)",
+      "station": "International",
+      "expedition": "Expedition 72",
+      "spaceflight": "Soyuz MS"
+    },
+    {
+      "name": "Alexey Zubritsky",
+      "country": "Russia",
+      "wikipedia": "https://en.wikipedia.org/wiki/Alexey_Zubritsky",
+      "station": "International",
+      "expedition": "Expedition 72",
+      "spaceflight": "Soyuz MS"
+    },
+    {
+      "name": "Jonny Kim",
+      "country": "United States",
+      "wikipedia": "https://en.wikipedia.org/wiki/Jonny_Kim",
+      "station": "International",
+      "expedition": "Expedition 72",
+      "spaceflight": "Soyuz MS"
+    },
+    {
       "name": "Cai Xuzhe",
       "country": "China",
       "wikipedia": "https://en.wikipedia.org/wiki/Cai_Xuzhe",
@@ -81,8 +105,8 @@
       "spaceflight": "Shenzhou"
     }
   ],
-  "number": 10,
+  "number": 13,
   "message": "success",
-  "timestamp": "2025-04-08T17:18:00.203Z",
+  "timestamp": "2025-04-08T18:27:32.039Z",
   "source": "Wikipedia:People currently in space"
 }
