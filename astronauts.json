@@ -1,30 +1,6 @@
 {
   "people": [
     {
-      "name": "Aleksey Ovchinin",
-      "country": "Russia",
-      "wikipedia": "https://en.wikipedia.org/wiki/Aleksey_Ovchinin",
-      "station": "International",
-      "expedition": "Expedition 72",
-      "spaceflight": "Soyuz MS"
-    },
-    {
-      "name": "Ivan Vagner",
-      "country": "Russia",
-      "wikipedia": "https://en.wikipedia.org/wiki/Ivan_Vagner",
-      "station": "International",
-      "expedition": "Expedition 72",
-      "spaceflight": "Soyuz MS"
-    },
-    {
-      "name": "Donald Pettit",
-      "country": "United States",
-      "wikipedia": "https://en.wikipedia.org/wiki/Donald_Pettit",
-      "station": "International",
-      "expedition": "Expedition 72",
-      "spaceflight": "Soyuz MS"
-    },
-    {
       "name": "Anne McClain",
       "country": "United States",
       "wikipedia": "https://en.wikipedia.org/wiki/Anne_McClain",
@@ -105,8 +81,8 @@
       "spaceflight": "Shenzhou"
     }
   ],
-  "number": 13,
+  "number": 10,
   "message": "success",
-  "timestamp": "2025-04-20T15:18:33.972Z",
+  "timestamp": "2025-04-20T16:22:21.410Z",
   "source": "Wikipedia:People currently in space"
 }
