@@ -5,7 +5,7 @@
       "country": "United States",
       "wikipedia": "https://en.wikipedia.org/wiki/Anne_McClain",
       "station": "International",
-      "expedition": "Expedition 72",
+      "expedition": "Expedition 73",
       "spaceflight": "SpaceX Crew"
     },
     {
@@ -13,7 +13,7 @@
       "country": "United States",
       "wikipedia": "https://en.wikipedia.org/wiki/Nichole_Ayers",
       "station": "International",
-      "expedition": "Expedition 72",
+      "expedition": "Expedition 73",
       "spaceflight": "SpaceX Crew"
     },
     {
@@ -21,7 +21,7 @@
       "country": "Japan",
       "wikipedia": "https://en.wikipedia.org/wiki/Takuya_Onishi",
       "station": "International",
-      "expedition": "Expedition 72",
+      "expedition": "Expedition 73",
       "spaceflight": "SpaceX Crew"
     },
     {
@@ -29,7 +29,7 @@
       "country": "Russia",
       "wikipedia": "https://en.wikipedia.org/wiki/Kirill_Peskov",
       "station": "International",
-      "expedition": "Expedition 72",
+      "expedition": "Expedition 73",
       "spaceflight": "SpaceX Crew"
     },
     {
@@ -37,7 +37,7 @@
       "country": "Russia",
       "wikipedia": "https://en.wikipedia.org/wiki/Sergey_Ryzhikov_(cosmonaut)",
       "station": "International",
-      "expedition": "Expedition 72",
+      "expedition": "Expedition 73",
       "spaceflight": "Soyuz MS"
     },
     {
@@ -45,7 +45,7 @@
       "country": "Russia",
       "wikipedia": "https://en.wikipedia.org/wiki/Alexey_Zubritsky",
       "station": "International",
-      "expedition": "Expedition 72",
+      "expedition": "Expedition 73",
       "spaceflight": "Soyuz MS"
     },
     {
@@ -53,7 +53,7 @@
       "country": "United States",
       "wikipedia": "https://en.wikipedia.org/wiki/Jonny_Kim",
       "station": "International",
-      "expedition": "Expedition 72",
+      "expedition": "Expedition 73",
       "spaceflight": "Soyuz MS"
     },
     {
@@ -61,7 +61,7 @@
       "country": "China",
       "wikipedia": "https://en.wikipedia.org/wiki/Cai_Xuzhe",
       "station": "Tiangong",
-      "expedition": "Expedition 8",
+      "expedition": "Expedition 9",
       "spaceflight": "Shenzhou"
     },
     {
@@ -69,7 +69,7 @@
       "country": "China",
       "wikipedia": "https://en.wikipedia.org/wiki/Song_Lingdong",
       "station": "Tiangong",
-      "expedition": "Expedition 8",
+      "expedition": "Expedition 9",
       "spaceflight": "Shenzhou"
     },
     {
@@ -77,12 +77,36 @@
       "country": "China",
       "wikipedia": "https://en.wikipedia.org/wiki/Wang_Haoze",
       "station": "Tiangong",
-      "expedition": "Expedition 8",
+      "expedition": "Expedition 9",
+      "spaceflight": "Shenzhou"
+    },
+    {
+      "name": "Chen Dong",
+      "country": "China",
+      "wikipedia": "https://en.wikipedia.org/wiki/Chen_Dong_(taikonaut)",
+      "station": "Tiangong",
+      "expedition": "Expedition 9",
+      "spaceflight": "Shenzhou"
+    },
+    {
+      "name": "Chen Zhongrui",
+      "country": "China",
+      "wikipedia": "https://en.wikipedia.org/w/index.php?title=Chen_Zhongrui&action=edit&redlink=1",
+      "station": "Tiangong",
+      "expedition": "Expedition 9",
+      "spaceflight": "Shenzhou"
+    },
+    {
+      "name": "Wang Jie",
+      "country": "China",
+      "wikipedia": "https://en.wikipedia.org/w/index.php?title=Wang_Jie_(taikonaut)&action=edit&redlink=1",
+      "station": "Tiangong",
+      "expedition": "Expedition 9",
       "spaceflight": "Shenzhou"
     }
   ],
-  "number": 10,
+  "number": 13,
   "message": "success",
-  "timestamp": "2025-04-24T10:22:27.631Z",
+  "timestamp": "2025-04-24T11:17:13.568Z",
   "source": "Wikipedia:People currently in space"
 }
