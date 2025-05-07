@@ -67,7 +67,7 @@
     {
       "name": "Chen Zhongrui",
       "country": "China",
-      "wikipedia": "https://en.wikipedia.org/w/index.php?title=Chen_Zhongrui&action=edit&redlink=1",
+      "wikipedia": "https://en.wikipedia.org/wiki/Chen_Zhongrui",
       "station": "Tiangong",
       "expedition": "Expedition 9",
       "spaceflight": "Shenzhou"
@@ -75,7 +75,7 @@
     {
       "name": "Wang Jie",
       "country": "China",
-      "wikipedia": "https://en.wikipedia.org/w/index.php?title=Wang_Jie_(taikonaut)&action=edit&redlink=1",
+      "wikipedia": "https://en.wikipedia.org/wiki/Wang_Jie_(taikonaut)",
       "station": "Tiangong",
       "expedition": "Expedition 9",
       "spaceflight": "Shenzhou"
@@ -83,6 +83,6 @@
   ],
   "number": 10,
   "message": "success",
-  "timestamp": "2025-05-07T11:18:00.061Z",
+  "timestamp": "2025-05-07T12:43:14.538Z",
   "source": "Wikipedia:People currently in space"
 }
