@@ -57,38 +57,6 @@
       "spaceflight": "Soyuz MS"
     },
     {
-      "name": "Peggy Whitson",
-      "country": "United States",
-      "wikipedia": "https://en.wikipedia.org/wiki/Peggy_Whitson",
-      "station": "International",
-      "expedition": "Expedition 73",
-      "spaceflight": "Unknown"
-    },
-    {
-      "name": "Shubhanshu Shukla",
-      "country": "India",
-      "wikipedia": "https://en.wikipedia.org/wiki/Shubhanshu_Shukla",
-      "station": "International",
-      "expedition": "Expedition 73",
-      "spaceflight": "Unknown"
-    },
-    {
-      "name": "Sławosz Uznański-Wiśniewski",
-      "country": "Poland",
-      "wikipedia": "https://en.wikipedia.org/wiki/S%C5%82awosz_Uzna%C5%84ski-Wi%C5%9Bniewski",
-      "station": "International",
-      "expedition": "Expedition 73",
-      "spaceflight": "Unknown"
-    },
-    {
-      "name": "Tibor Kapu",
-      "country": "Hungary",
-      "wikipedia": "https://en.wikipedia.org/wiki/Tibor_Kapu",
-      "station": "International",
-      "expedition": "Expedition 73",
-      "spaceflight": "Unknown"
-    },
-    {
       "name": "Chen Dong",
       "country": "China",
       "wikipedia": "https://en.wikipedia.org/wiki/Chen_Dong_(taikonaut)",
@@ -113,8 +81,8 @@
       "spaceflight": "Shenzhou"
     }
   ],
-  "number": 14,
+  "number": 10,
   "message": "success",
-  "timestamp": "2025-07-14T11:19:29.524Z",
+  "timestamp": "2025-07-14T12:47:20.528Z",
   "source": "Wikipedia:People currently in space"
 }
