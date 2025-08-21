@@ -9,7 +9,7 @@ permissions:  # 👈 Grant permission for actions to push commits
   contents: write
 
 env:
-  NODE_VERSION: "18.20.6"
+  NODE_VERSION: "20"   # ✅ Use Node.js 20 instead of 18
 
 jobs:
   update-data:
@@ -25,9 +25,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"   # ✅ Speeds up installs by caching dependencies
 
       - name: 📦 Install dependencies
-        run: npm install
+        run: npm ci    # ✅ Faster & more reliable than `npm install` for CI
 
       - name: 🚀 Run update script
         run: node update_astronauts.js
