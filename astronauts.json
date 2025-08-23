@@ -1,38 +1,6 @@
 {
   "people": [
     {
-      "name": "Anne McClain",
-      "country": "United States",
-      "wikipedia": "https://en.wikipedia.org/wiki/Anne_McClain",
-      "station": "International",
-      "expedition": "Expedition 73",
-      "spaceflight": "SpaceX Crew"
-    },
-    {
-      "name": "Nichole Ayers",
-      "country": "United States",
-      "wikipedia": "https://en.wikipedia.org/wiki/Nichole_Ayers",
-      "station": "International",
-      "expedition": "Expedition 73",
-      "spaceflight": "SpaceX Crew"
-    },
-    {
-      "name": "Takuya Onishi",
-      "country": "Japan",
-      "wikipedia": "https://en.wikipedia.org/wiki/Takuya_Onishi",
-      "station": "International",
-      "expedition": "Expedition 73",
-      "spaceflight": "SpaceX Crew"
-    },
-    {
-      "name": "Kirill Peskov",
-      "country": "Russia",
-      "wikipedia": "https://en.wikipedia.org/wiki/Kirill_Peskov",
-      "station": "International",
-      "expedition": "Expedition 73",
-      "spaceflight": "SpaceX Crew"
-    },
-    {
       "name": "Sergey Ryzhikov",
       "country": "Russia",
       "wikipedia": "https://en.wikipedia.org/wiki/Sergey_Ryzhikov_(cosmonaut)",
@@ -57,32 +25,40 @@
       "spaceflight": "Soyuz MS"
     },
     {
-      "name": "Chen Dong",
-      "country": "China",
-      "wikipedia": "https://en.wikipedia.org/wiki/Chen_Dong_(taikonaut)",
-      "station": "Tiangong",
-      "expedition": "Expedition 9",
-      "spaceflight": "Shenzhou"
+      "name": "Zena Cardman",
+      "country": "United States",
+      "wikipedia": "https://en.wikipedia.org/wiki/Zena_Cardman",
+      "station": "International",
+      "expedition": "Expedition 73",
+      "spaceflight": "SpaceX Crew"
     },
     {
-      "name": "Chen Zhongrui",
-      "country": "China",
-      "wikipedia": "https://en.wikipedia.org/wiki/Chen_Zhongrui",
-      "station": "Tiangong",
-      "expedition": "Expedition 9",
-      "spaceflight": "Shenzhou"
+      "name": "Michael Fincke",
+      "country": "United States",
+      "wikipedia": "https://en.wikipedia.org/wiki/Michael_Fincke",
+      "station": "International",
+      "expedition": "Expedition 73",
+      "spaceflight": "SpaceX Crew"
     },
     {
-      "name": "Wang Jie",
-      "country": "China",
-      "wikipedia": "https://en.wikipedia.org/wiki/Wang_Jie_(taikonaut)",
-      "station": "Tiangong",
-      "expedition": "Expedition 9",
-      "spaceflight": "Shenzhou"
+      "name": "Kimiya Yui",
+      "country": "Japan",
+      "wikipedia": "https://en.wikipedia.org/wiki/Kimiya_Yui",
+      "station": "International",
+      "expedition": "Expedition 73",
+      "spaceflight": "SpaceX Crew"
+    },
+    {
+      "name": "Oleg Platonov",
+      "country": "Russia",
+      "wikipedia": "https://en.wikipedia.org/wiki/Oleg_Platonov_(cosmonaut)",
+      "station": "International",
+      "expedition": "Expedition 73",
+      "spaceflight": "SpaceX Crew"
     }
   ],
-  "number": 10,
+  "number": 7,
   "message": "success",
-  "timestamp": "2025-07-31T08:31:59.296Z",
+  "timestamp": "2025-08-23T03:03:10.186Z",
   "source": "Wikipedia:People currently in space"
 }
