@@ -28,7 +28,7 @@ jobs:
           cache: "npm"   # ✅ Speeds up installs by caching dependencies
 
       - name: 📦 Install dependencies
-        run: npm ci    # ✅ Faster & more reliable than `npm install` for CI
+        run: npm install
 
       - name: 🚀 Run update script
         run: node update_astronauts.js
