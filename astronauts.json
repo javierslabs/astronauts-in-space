@@ -55,10 +55,34 @@
       "station": "International",
       "expedition": "Expedition 73",
       "spaceflight": "SpaceX Crew"
+    },
+    {
+      "name": "Sergey Kud-Sverchkov",
+      "country": "Russia",
+      "wikipedia": "https://en.wikipedia.org/wiki/Sergey_Kud-Sverchkov",
+      "station": "International",
+      "expedition": "Expedition 73",
+      "spaceflight": "Soyuz MS"
+    },
+    {
+      "name": "Sergey Mikayev",
+      "country": "Russia",
+      "wikipedia": "https://en.wikipedia.org/wiki/Sergey_Mikayev",
+      "station": "International",
+      "expedition": "Expedition 73",
+      "spaceflight": "Soyuz MS"
+    },
+    {
+      "name": "Christopher Williams",
+      "country": "United States",
+      "wikipedia": "https://en.wikipedia.org/wiki/Christopher_Williams_(astronaut)",
+      "station": "International",
+      "expedition": "Expedition 73",
+      "spaceflight": "Soyuz MS"
     }
   ],
-  "number": 7,
+  "number": 10,
   "message": "success",
-  "timestamp": "2025-11-27T19:16:59.860Z",
+  "timestamp": "2025-11-27T20:21:20.414Z",
   "source": "Wikipedia:People currently in space"
 }
