@@ -1,35 +1,11 @@
 {
   "people": [
     {
-      "name": "Sergey Ryzhikov",
-      "country": "Russia",
-      "wikipedia": "https://en.wikipedia.org/wiki/Sergey_Ryzhikov_(cosmonaut)",
-      "station": "International",
-      "expedition": "Expedition 73",
-      "spaceflight": "Soyuz MS"
-    },
-    {
-      "name": "Alexey Zubritsky",
-      "country": "Russia",
-      "wikipedia": "https://en.wikipedia.org/wiki/Alexey_Zubritsky",
-      "station": "International",
-      "expedition": "Expedition 73",
-      "spaceflight": "Soyuz MS"
-    },
-    {
-      "name": "Jonny Kim",
-      "country": "United States",
-      "wikipedia": "https://en.wikipedia.org/wiki/Jonny_Kim",
-      "station": "International",
-      "expedition": "Expedition 73",
-      "spaceflight": "Soyuz MS"
-    },
-    {
       "name": "Zena Cardman",
       "country": "United States",
       "wikipedia": "https://en.wikipedia.org/wiki/Zena_Cardman",
       "station": "International",
-      "expedition": "Expedition 73",
+      "expedition": "Expedition 74",
       "spaceflight": "SpaceX Crew"
     },
     {
@@ -37,7 +13,7 @@
       "country": "United States",
       "wikipedia": "https://en.wikipedia.org/wiki/Michael_Fincke",
       "station": "International",
-      "expedition": "Expedition 73",
+      "expedition": "Expedition 74",
       "spaceflight": "SpaceX Crew"
     },
     {
@@ -45,7 +21,7 @@
       "country": "Japan",
       "wikipedia": "https://en.wikipedia.org/wiki/Kimiya_Yui",
       "station": "International",
-      "expedition": "Expedition 73",
+      "expedition": "Expedition 74",
       "spaceflight": "SpaceX Crew"
     },
     {
@@ -53,7 +29,7 @@
       "country": "Russia",
       "wikipedia": "https://en.wikipedia.org/wiki/Oleg_Platonov_(cosmonaut)",
       "station": "International",
-      "expedition": "Expedition 73",
+      "expedition": "Expedition 74",
       "spaceflight": "SpaceX Crew"
     },
     {
@@ -61,7 +37,7 @@
       "country": "Russia",
       "wikipedia": "https://en.wikipedia.org/wiki/Sergey_Kud-Sverchkov",
       "station": "International",
-      "expedition": "Expedition 73",
+      "expedition": "Expedition 74",
       "spaceflight": "Soyuz MS"
     },
     {
@@ -69,7 +45,7 @@
       "country": "Russia",
       "wikipedia": "https://en.wikipedia.org/wiki/Sergey_Mikayev",
       "station": "International",
-      "expedition": "Expedition 73",
+      "expedition": "Expedition 74",
       "spaceflight": "Soyuz MS"
     },
     {
@@ -77,12 +53,12 @@
       "country": "United States",
       "wikipedia": "https://en.wikipedia.org/wiki/Christopher_Williams_(astronaut)",
       "station": "International",
-      "expedition": "Expedition 73",
+      "expedition": "Expedition 74",
       "spaceflight": "Soyuz MS"
     }
   ],
-  "number": 10,
+  "number": 7,
   "message": "success",
-  "timestamp": "2025-12-09T19:16:25.778Z",
+  "timestamp": "2025-12-09T20:22:39.586Z",
   "source": "Wikipedia:People currently in space"
 }
