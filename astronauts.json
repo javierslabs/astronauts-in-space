@@ -1,38 +1,6 @@
 {
   "people": [
     {
-      "name": "Zena Cardman",
-      "country": "United States",
-      "wikipedia": "https://en.wikipedia.org/wiki/Zena_Cardman",
-      "station": "International",
-      "expedition": "Expedition 74",
-      "spaceflight": "SpaceX Crew"
-    },
-    {
-      "name": "Michael Fincke",
-      "country": "United States",
-      "wikipedia": "https://en.wikipedia.org/wiki/Michael_Fincke",
-      "station": "International",
-      "expedition": "Expedition 74",
-      "spaceflight": "SpaceX Crew"
-    },
-    {
-      "name": "Kimiya Yui",
-      "country": "Japan",
-      "wikipedia": "https://en.wikipedia.org/wiki/Kimiya_Yui",
-      "station": "International",
-      "expedition": "Expedition 74",
-      "spaceflight": "SpaceX Crew"
-    },
-    {
-      "name": "Oleg Platonov",
-      "country": "Russia",
-      "wikipedia": "https://en.wikipedia.org/wiki/Oleg_Platonov_(cosmonaut)",
-      "station": "International",
-      "expedition": "Expedition 74",
-      "spaceflight": "SpaceX Crew"
-    },
-    {
       "name": "Sergey Kud-Sverchkov",
       "country": "Russia",
       "wikipedia": "https://en.wikipedia.org/wiki/Sergey_Kud-Sverchkov",
@@ -57,8 +25,8 @@
       "spaceflight": "Soyuz MS"
     }
   ],
-  "number": 7,
+  "number": 3,
   "message": "success",
-  "timestamp": "2026-01-14T21:23:58.681Z",
+  "timestamp": "2026-01-14T22:25:02.633Z",
   "source": "Wikipedia:People currently in space"
 }
