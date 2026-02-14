@@ -23,10 +23,42 @@
       "station": "International",
       "expedition": "Expedition 74",
       "spaceflight": "Soyuz MS"
+    },
+    {
+      "name": "Jessica Meir",
+      "country": "United States",
+      "wikipedia": "https://en.wikipedia.org/wiki/Jessica_Meir",
+      "station": "International",
+      "expedition": "Expedition 74",
+      "spaceflight": "SpaceX Crew"
+    },
+    {
+      "name": "Jack Hathaway",
+      "country": "United States",
+      "wikipedia": "https://en.wikipedia.org/wiki/Jack_Hathaway",
+      "station": "International",
+      "expedition": "Expedition 74",
+      "spaceflight": "SpaceX Crew"
+    },
+    {
+      "name": "Sophie Adenot",
+      "country": "France",
+      "wikipedia": "https://en.wikipedia.org/wiki/Sophie_Adenot",
+      "station": "International",
+      "expedition": "Expedition 74",
+      "spaceflight": "SpaceX Crew"
+    },
+    {
+      "name": "Andrey Fedyaev",
+      "country": "Russia",
+      "wikipedia": "https://en.wikipedia.org/wiki/Andrey_Fedyaev",
+      "station": "International",
+      "expedition": "Expedition 74",
+      "spaceflight": "SpaceX Crew"
     }
   ],
-  "number": 3,
+  "number": 7,
   "message": "success",
-  "timestamp": "2026-02-14T19:26:00.557Z",
+  "timestamp": "2026-02-14T20:29:13.051Z",
   "source": "Wikipedia:People currently in space"
 }
