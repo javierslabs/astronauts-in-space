@@ -55,10 +55,34 @@
       "station": "International",
       "expedition": "Expedition 74",
       "spaceflight": "SpaceX Crew"
+    },
+    {
+      "name": "Pyotr Dubrov",
+      "country": "Russia",
+      "wikipedia": "https://en.wikipedia.org/wiki/Pyotr_Dubrov",
+      "station": "International",
+      "expedition": "Expedition 74",
+      "spaceflight": "Soyuz MS"
+    },
+    {
+      "name": "Anna Kikina",
+      "country": "Russia",
+      "wikipedia": "https://en.wikipedia.org/wiki/Anna_Kikina",
+      "station": "International",
+      "expedition": "Expedition 74",
+      "spaceflight": "Soyuz MS"
+    },
+    {
+      "name": "Anil Menon",
+      "country": "United States",
+      "wikipedia": "https://en.wikipedia.org/wiki/Anil_Menon",
+      "station": "International",
+      "expedition": "Expedition 74",
+      "spaceflight": "Soyuz MS"
     }
   ],
-  "number": 7,
+  "number": 10,
   "message": "success",
-  "timestamp": "2026-07-15T12:16:02.622Z",
+  "timestamp": "2026-07-15T14:51:51.115Z",
   "source": "Wikipedia:People currently in space"
 }
