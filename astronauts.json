@@ -1,35 +1,11 @@
 {
   "people": [
     {
-      "name": "Sergey Kud-Sverchkov",
-      "country": "Russia",
-      "wikipedia": "https://en.wikipedia.org/wiki/Sergey_Kud-Sverchkov",
-      "station": "International",
-      "expedition": "Expedition 74",
-      "spaceflight": "Soyuz MS"
-    },
-    {
-      "name": "Sergei Mikayev",
-      "country": "Russia",
-      "wikipedia": "https://en.wikipedia.org/wiki/Sergei_Mikayev",
-      "station": "International",
-      "expedition": "Expedition 74",
-      "spaceflight": "Soyuz MS"
-    },
-    {
-      "name": "Christopher Williams",
-      "country": "United States",
-      "wikipedia": "https://en.wikipedia.org/wiki/Christopher_Williams_(astronaut)",
-      "station": "International",
-      "expedition": "Expedition 74",
-      "spaceflight": "Soyuz MS"
-    },
-    {
       "name": "Jessica Meir",
       "country": "United States",
       "wikipedia": "https://en.wikipedia.org/wiki/Jessica_Meir",
       "station": "International",
-      "expedition": "Expedition 74",
+      "expedition": "Expedition 75",
       "spaceflight": "SpaceX Crew"
     },
     {
@@ -37,7 +13,7 @@
       "country": "United States",
       "wikipedia": "https://en.wikipedia.org/wiki/Jack_Hathaway",
       "station": "International",
-      "expedition": "Expedition 74",
+      "expedition": "Expedition 75",
       "spaceflight": "SpaceX Crew"
     },
     {
@@ -45,7 +21,7 @@
       "country": "France",
       "wikipedia": "https://en.wikipedia.org/wiki/Sophie_Adenot",
       "station": "International",
-      "expedition": "Expedition 74",
+      "expedition": "Expedition 75",
       "spaceflight": "SpaceX Crew"
     },
     {
@@ -53,7 +29,7 @@
       "country": "Russia",
       "wikipedia": "https://en.wikipedia.org/wiki/Andrey_Fedyaev",
       "station": "International",
-      "expedition": "Expedition 74",
+      "expedition": "Expedition 75",
       "spaceflight": "SpaceX Crew"
     },
     {
@@ -61,7 +37,7 @@
       "country": "Russia",
       "wikipedia": "https://en.wikipedia.org/wiki/Pyotr_Dubrov",
       "station": "International",
-      "expedition": "Expedition 74",
+      "expedition": "Expedition 75",
       "spaceflight": "Soyuz MS"
     },
     {
@@ -69,7 +45,7 @@
       "country": "Russia",
       "wikipedia": "https://en.wikipedia.org/wiki/Anna_Kikina",
       "station": "International",
-      "expedition": "Expedition 74",
+      "expedition": "Expedition 75",
       "spaceflight": "Soyuz MS"
     },
     {
@@ -77,12 +53,12 @@
       "country": "United States",
       "wikipedia": "https://en.wikipedia.org/wiki/Anil_Menon",
       "station": "International",
-      "expedition": "Expedition 74",
+      "expedition": "Expedition 75",
       "spaceflight": "Soyuz MS"
     }
   ],
-  "number": 10,
+  "number": 7,
   "message": "success",
-  "timestamp": "2026-07-29T15:08:01.377Z",
+  "timestamp": "2026-07-29T17:16:03.358Z",
   "source": "Wikipedia:People currently in space"
 }
