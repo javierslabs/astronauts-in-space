@@ -10,68 +10,57 @@ async function updateAstronauts() {
         const data = await response.json();
         const content = data.parse.text['*'];
         const $ = cheerio.load(content);
-        
-        const stations = [];
-        
-        // Process the hierarchical structure
-        $('.navbox-inner').each((_, navbox) => {
-            // 1. Find Space Stations
-            $(navbox).find('.navbox-group').each((_, group) => {
-                const $group = $(group);
-                const stationLink = $group.find('a').first();
-                
-                // Only process if it's a space station
-                if (!stationLink.text().toLowerCase().includes('space station')) return;
-                
-                const stationInfo = {
-                    name: stationLink.text().replace(/\s+space\s+station/i, '').trim(),
-                    expedition: extractExpedition($group.text()),
-                    spaceflights: []
-                };
-                
-                // 2. Find Spaceflights within this station
-                const crewTable = $group.closest('tr').find('.navbox-list table');
-                crewTable.find('.navbox-group').each((_, vehicleGroup) => {
-                    const $vehicleGroup = $(vehicleGroup);
-                    const spaceflight = {
-                        name: $vehicleGroup.text().trim(),
-                        crew: []
-                    };
-                    
-                    // 3. Find Crew Members for this spaceflight
-                    const crewList = $vehicleGroup.closest('tr').find('ul li');
-                    crewList.each((_, crewItem) => {
-                        const $crew = $(crewItem);
-                        const astronautLink = $crew.find('a').last();
-                        spaceflight.crew.push({
-                            name: astronautLink.text(),
-                            country: $crew.find('.flagicon a').attr('title') || 'Unknown',
-                            wikipedia: 'https://en.wikipedia.org' + (astronautLink.attr('href') || '')
-                        });
-                    });
-                    
-                    stationInfo.spaceflights.push(spaceflight);
-                });
-                
-                // 4. Flatten the structure for output
-                stationInfo.spaceflights.forEach(flight => {
-                    flight.crew.forEach(crew => {
-                        stations.push({
-                            name: crew.name,
-                            country: crew.country,
-                            wikipedia: crew.wikipedia,
-                            station: stationInfo.name,
-                            expedition: stationInfo.expedition,
-                            spaceflight: getSpaceflightType(flight.name)
-                        });
+
+        const people = [];
+        const seen = new Set();
+
+        // Scope to the actual "People currently in space" navbox only.
+        // The parsed page also includes documentation / other navboxes.
+        const $mainNavbox = findPeopleInSpaceNavbox($);
+        if (!$mainNavbox.length) {
+            throw new Error('Could not find "People currently in space" navbox');
+        }
+
+        // Top-level destination rows only (ISS, Tiangong, future stations,
+        // free-flying missions, etc.) — not nested vehicle rows.
+        $mainNavbox.children('tbody').children('tr').each((_, row) => {
+            const $row = $(row);
+            const $destinationGroup = $row.children('th.navbox-group');
+            if (!$destinationGroup.length) return;
+
+            const destination = getDestinationInfo($, $destinationGroup);
+            const $list = $row.children('td.navbox-list');
+            if (!$list.length) return;
+
+            const spaceflights = extractSpaceflights($, $list);
+
+            spaceflights.forEach(flight => {
+                flight.crew.forEach(crew => {
+                    const key = (crew.wikipedia || crew.name).toLowerCase();
+                    if (!crew.name || seen.has(key)) return;
+                    seen.add(key);
+
+                    // For free-flying missions with no nested vehicle row,
+                    // fall back to the destination/mission name as spacecraft.
+                    const vehicleLabel = flight.name === 'Direct'
+                        ? destination.name
+                        : flight.name;
+
+                    people.push({
+                        name: crew.name,
+                        country: crew.country,
+                        wikipedia: crew.wikipedia,
+                        station: destination.name,
+                        expedition: destination.expedition,
+                        spaceflight: getSpaceflightType(vehicleLabel)
                     });
                 });
             });
         });
 
         const jsonData = {
-            people: stations,
-            number: stations.length,
+            people,
+            number: people.length,
             message: "success",
             timestamp: new Date().toISOString(),
             source: "Wikipedia:People currently in space"
@@ -79,8 +68,7 @@ async function updateAstronauts() {
 
         fs.writeFileSync("astronauts.json", JSON.stringify(jsonData, null, 2));
         console.log("✅ astronauts.json updated successfully!");
-        console.log(`Found ${stations.length} astronauts currently in space`);
-        
+        console.log(`Found ${people.length} astronauts currently in space`);
         return jsonData;
 
     } catch (error) {
@@ -89,20 +77,105 @@ async function updateAstronauts() {
     }
 }
 
+function findPeopleInSpaceNavbox($) {
+    let $match = $();
+    $('.navbox-inner').each((_, navbox) => {
+        const title = $(navbox).find('> tbody > tr > th.navbox-title').first().text().toLowerCase();
+        if (title.includes('people currently in space')) {
+            $match = $(navbox);
+            return false;
+        }
+    });
+    return $match;
+}
+
+function getDestinationInfo($, $group) {
+    const $link = $group.find('a').first();
+    const rawName = ($link.text() || $group.text() || '').trim();
+    // Prefer the destination link text; strip a trailing "space station"
+    // so "International Space Station" stays "International" for the UI.
+    const name = rawName
+        .replace(/\s*\([^)]*expedition[^)]*\)\s*/i, '')
+        .replace(/\s+space\s+station$/i, '')
+        .trim() || 'Unknown';
+
+    return {
+        name,
+        expedition: extractExpedition($group.text())
+    };
+}
+
+/**
+ * Extract vehicle/crew groups from a destination's list cell.
+ * Supports:
+ * 1) Nested child navbox (station → vehicles → crew) — current ISS/Tiangong
+ * 2) Direct crew list under the destination (free-flying mission / shuttle)
+ */
+function extractSpaceflights($, $list) {
+    const spaceflights = [];
+    const $subgroup = $list.find('> div > table.navbox-subgroup, > table.navbox-subgroup').first();
+
+    if ($subgroup.length) {
+        $subgroup.find('> tbody > tr').each((_, vehicleRow) => {
+            const $vehicleRow = $(vehicleRow);
+            const $vehicleGroup = $vehicleRow.children('th.navbox-group');
+            if (!$vehicleGroup.length) return;
+
+            const vehicleName = ($vehicleGroup.find('a').first().text() || $vehicleGroup.text() || '').trim();
+            const crew = extractCrew($, $vehicleRow.children('td.navbox-list'));
+            if (crew.length) {
+                spaceflights.push({ name: vehicleName || 'Unknown', crew });
+            }
+        });
+        return spaceflights;
+    }
+
+    // No nested vehicles — crew listed directly under the destination
+    const crew = extractCrew($, $list);
+    if (crew.length) {
+        spaceflights.push({ name: 'Direct', crew });
+    }
+    return spaceflights;
+}
+
+function extractCrew($, $listCell) {
+    const crew = [];
+    $listCell.find('ul li').each((_, item) => {
+        const $item = $(item);
+        const $astronautLink = $item.find('a').last();
+        const name = ($astronautLink.text() || '').trim();
+        if (!name) return;
+
+        const href = $astronautLink.attr('href') || '';
+        crew.push({
+            name,
+            country: $item.find('.flagicon a').attr('title') || 'Unknown',
+            wikipedia: href.startsWith('http') ? href : `https://en.wikipedia.org${href}`
+        });
+    });
+    return crew;
+}
+
 function extractExpedition(text) {
-    const match = text.match(/Expedition\s*(\d+)/i);
-    return match ? `Expedition ${match[1]}` : 'Current Mission';
+    let match = text.match(/Expedition\s*(\d+)/i);
+    if (match) return `Expedition ${match[1]}`;
+
+    match = text.match(/(\d+)(?:st|nd|rd|th)\s+expedition/i);
+    if (match) return `Expedition ${match[1]}`;
+
+    return 'Current Mission';
 }
 
 function getSpaceflightType(vehicleName) {
+    if (!vehicleName) return 'Unknown';
     if (vehicleName.includes('Soyuz')) return 'Soyuz MS';
     if (vehicleName.includes('SpaceX') || vehicleName.includes('Crew Dragon')) return 'SpaceX Crew';
     if (vehicleName.includes('Shenzhou')) return 'Shenzhou';
     if (vehicleName.includes('Starliner')) return 'Starliner';
-    return 'Unknown';
+    // Unknown vehicle types: keep the Wikipedia label so the UI stays useful
+    return vehicleName.trim();
 }
 
-// Run the function if called directly
 if (require.main === module) {
     updateAstronauts();
 }

@@ -157,6 +157,7 @@ function getFlagEmoji(countryName) {
         'Russia': '🇷🇺',
         'United States': '🇺🇸',
         'China': '🇨🇳',
+        'Hong Kong': '🇭🇰',
         'Japan': '🇯🇵',
         'Germany': '🇩🇪',
         'France': '🇫🇷',
