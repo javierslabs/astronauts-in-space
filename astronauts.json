@@ -57,6 +57,38 @@
       "spaceflight": "Soyuz MS"
     },
     {
+      "name": "Jessica Watkins",
+      "country": "United States",
+      "wikipedia": "https://en.wikipedia.org/wiki/Jessica_Watkins",
+      "station": "International",
+      "expedition": "Expedition 75",
+      "spaceflight": "SpaceX Crew"
+    },
+    {
+      "name": "Luke Delaney",
+      "country": "United States",
+      "wikipedia": "https://en.wikipedia.org/wiki/Luke_Delaney_(astronaut)",
+      "station": "International",
+      "expedition": "Expedition 75",
+      "spaceflight": "SpaceX Crew"
+    },
+    {
+      "name": "Joshua Kutryk",
+      "country": "Canada",
+      "wikipedia": "https://en.wikipedia.org/wiki/Joshua_Kutryk",
+      "station": "International",
+      "expedition": "Expedition 75",
+      "spaceflight": "SpaceX Crew"
+    },
+    {
+      "name": "Sergey Teteryatnikov",
+      "country": "Russia",
+      "wikipedia": "https://en.wikipedia.org/wiki/Sergey_Teteryatnikov",
+      "station": "International",
+      "expedition": "Expedition 75",
+      "spaceflight": "SpaceX Crew"
+    },
+    {
       "name": "Zhu Yangzhu",
       "country": "China",
       "wikipedia": "https://en.wikipedia.org/wiki/Zhu_Yangzhu",
@@ -81,8 +113,8 @@
       "spaceflight": "Shenzhou"
     }
   ],
-  "number": 10,
+  "number": 14,
   "message": "success",
-  "timestamp": "2026-10-02T15:28:29.744Z",
+  "timestamp": "2026-10-02T20:25:33.307Z",
   "source": "Wikipedia:People currently in space"
 }
