@@ -1,38 +1,6 @@
 {
   "people": [
     {
-      "name": "Jessica Meir",
-      "country": "United States",
-      "wikipedia": "https://en.wikipedia.org/wiki/Jessica_Meir",
-      "station": "International",
-      "expedition": "Expedition 75",
-      "spaceflight": "SpaceX Crew"
-    },
-    {
-      "name": "Jack Hathaway",
-      "country": "United States",
-      "wikipedia": "https://en.wikipedia.org/wiki/Jack_Hathaway",
-      "station": "International",
-      "expedition": "Expedition 75",
-      "spaceflight": "SpaceX Crew"
-    },
-    {
-      "name": "Sophie Adenot",
-      "country": "France",
-      "wikipedia": "https://en.wikipedia.org/wiki/Sophie_Adenot",
-      "station": "International",
-      "expedition": "Expedition 75",
-      "spaceflight": "SpaceX Crew"
-    },
-    {
-      "name": "Andrey Fedyaev",
-      "country": "Russia",
-      "wikipedia": "https://en.wikipedia.org/wiki/Andrey_Fedyaev",
-      "station": "International",
-      "expedition": "Expedition 75",
-      "spaceflight": "SpaceX Crew"
-    },
-    {
       "name": "Pyotr Dubrov",
       "country": "Russia",
       "wikipedia": "https://en.wikipedia.org/wiki/Pyotr_Dubrov",
@@ -113,8 +81,8 @@
       "spaceflight": "Shenzhou"
     }
   ],
-  "number": 14,
+  "number": 10,
   "message": "success",
-  "timestamp": "2026-10-09T01:47:07.420Z",
+  "timestamp": "2026-10-09T08:35:36.538Z",
   "source": "Wikipedia:People currently in space"
 }
