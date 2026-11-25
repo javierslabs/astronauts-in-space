@@ -79,10 +79,34 @@
       "station": "Tiangong",
       "expedition": "Expedition 11",
       "spaceflight": "Shenzhou"
+    },
+    {
+      "name": "Tang Hongbo",
+      "country": "China",
+      "wikipedia": "https://en.wikipedia.org/wiki/Tang_Hongbo",
+      "station": "Tiangong",
+      "expedition": "Expedition 12",
+      "spaceflight": "Shenzhou"
+    },
+    {
+      "name": "Wu Yi",
+      "country": "China",
+      "wikipedia": "https://en.wikipedia.org/wiki/Wu_Yi_(taikonaut)",
+      "station": "Tiangong",
+      "expedition": "Expedition 12",
+      "spaceflight": "Shenzhou"
+    },
+    {
+      "name": "Muhammad Zeeshan Ali",
+      "country": "Pakistan",
+      "wikipedia": "https://en.wikipedia.org/wiki/Muhammad_Zeeshan_Ali",
+      "station": "Tiangong",
+      "expedition": "Expedition 12",
+      "spaceflight": "Shenzhou"
     }
   ],
-  "number": 10,
+  "number": 13,
   "message": "success",
-  "timestamp": "2026-11-25T01:58:16.976Z",
+  "timestamp": "2026-11-25T11:06:55.195Z",
   "source": "Wikipedia:People currently in space"
 }
